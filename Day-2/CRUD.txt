@@ -1,0 +1,120 @@
+CRUD stands for Create, Read, Update, and Delete. These are the four basic operations performed on a database
+
+C – Create → insertOne(), insertMany()
+R – Read → find(), findOne()
+U – Update → updateOne(), updateMany(), $set, $inc, $unset
+D – Delete → deleteOne(), deleteMany()
+
+1. Create:
+
+the CREATE operation is done using insertOne() and insertMany() to add new documents into a collection.
+a. InsertOne(): db.collectionName.insertOne({…}) : Insert a single document into a collection.
+b. InsertMany(): db.collectionName.insertMany([{...},{...}]) : Insert multiple documents at the same time.
+
+
+2.Read:
+
+READ operations are done using find() to get multiple documents and findOne() to fetch a single document based on a filter.
+a. findOne(): db.collection.findOne({ name: "Aisha" }): Get only one document and if no document matches it returns null.
+b. find(): db.students.find({ grade: "A" }): Get all matching documents.
+with condition -> db.students.find({ age: { $gt: 20 } })   // age > 20
+
+
+3.Update:
+
+MongoDB uses updateOne() and updateMany() for update operations, while $set, $inc, and $unset are used to modify, increment, or remove fields in a document.
+        db.collection.updateOne(filter, update)
+a. updateOne(): Updates the first document that matches the filter.
+db.students.updateOne(
+  { name: "Aisha" },          // filter
+  { $set: { grade: "A+" } }   // update
+)
+Only the first match is updated
+
+b.updateMany(): Updates all documents that match the filter.
+db.students.updateMany(
+  { grade: "C" },
+  { $set: { grade: "B" } }
+)  All students with grade C will be updated to B
+
+
+| **Operator**   | **Description**                              |
+| -------------- | -------------------------------------------- |
+| `$set`         | Change or add a field                        |
+| `$unset`       | Remove a field                               |
+| `$rename`      | Rename a field                               |
+| `$inc`         | Increase or decrease a number                |
+| `$mul`         | Multiply a numeric value                     |
+| `$min`         | Set a field only if the new value is smaller |
+| `$max`         | Set a field only if the new value is greater |
+| `$currentDate` | Set the field to the current date/time       |
+
+
+a.$inc: Increase or decrease a numeric value.
+db.students.updateOne(
+  { name: "Rahul" },
+  { $inc: { age: 1 } }   // age = age + 1
+)
+To decrease: { $inc: { age: -1 } }
+db.students.updateOne(
+  { name: "Rahul" },
+  { $inc: { marks: -5 } }   //decrease marks by -5
+)
+
+b. unset(): Remove a field from a document.
+db.students.updateOne(
+  { name: "Rahul" },
+  { $unset: { city: "" } }   OR  { $unset: { city: 1 } } 
+)
+
+c. rename(): Rename a field.
+db.students.updateOne(
+  { _id: 1 },
+  { $rename: { city: "location" } }
+)
+
+d. $inc: Increment or decrement a number.
+db.students.updateOne(
+  { _id: 1 },
+  { $inc: { age: 1, marks: 5 } }   //increment.
+)
+
+db.students.updateOne(
+  { _id: 1 },
+  { $inc: { age: 1, marks: -5 } }   //decrement
+)
+
+e. $mul: Multiply a numeric value.
+db.students.updateOne(
+  { _id: 1 },
+  { $mul: { marks: 1.1 } }   //Multiplies marks by 1.1 (increasing by 10%)
+)
+
+f. $max: Update only if the new value is greater.
+db.students.updateOne(
+  { _id: 1 },
+  { $max: { marks: 90 } }
+)
+If current marks < 90 → update it to 90
+If current marks ≥ 90 → no change
+
+g. $min: Update only if the new value is lesser.
+db.students.updateOne(
+  { _id: 1 },
+  { $min: { marks: 70 } }
+)
+
+h. $currentDate: Set the field to current date/time.
+db.students.updateOne(
+  { _id: 1 },
+  { $currentDate: { updatedAt: true } }
+)
+Adds or updates updatedAt with the current date/time (ISODate)
+
+
+
+4. Delete(): MongoDB uses deleteOne() to delete a single document and deleteMany() to delete multiple documents based on a filter.
+a. deleteOne(): Delete only the first document that matches the filter.
+db.students.deleteOne({ name: "Rahul" }): MongoDB will search for a document where name is "Rahul", it will delete only one, even if multiple Rahuls exist
+b. deleteMany(): Delete all documents that match the filter.
+db.students.deleteMany({}) : delete all documents from the students collection

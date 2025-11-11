@@ -1,0 +1,169 @@
+Ouery filters:
+
+Query filters are conditions used to match specific documents using comparison operators like $gt, $lt, and logical operators like $and, $or.
+
+Comparison Operators:
+
+| Operator | Meaning                       |
+| -------- | ----------------------------- |
+| `$gt`    | greater than                  |
+| `$lt`    | less than                     |
+| `$gte`   | greater than or equal         |
+| `$lte`   | less than or equal            |
+| `$eq`    | equal to                      |
+| `$ne`    | not equal                     |
+| `$in`    | matches any value in an array |
+| `$nin`   | not in array                  |
+
+Examples:
+
+| Query                                                       | Meaning                          |
+| ----------------------------------------------------------- | -------------------------------- |
+| `db.students.find({ age: { $gt: 20 } })`                    | age > 20                         |
+| `db.students.find({ age: { $lt: 25 } })`                    | age < 25                         |
+| `db.students.find({ age: { $gte: 22 } })`                   | age ≥ 22                         |
+| `db.students.find({ age: { $lte: 20 } })`                   | age ≤ 20                         |
+| `db.students.find({ city: { $eq: "Delhi" } })`              | city = Delhi                     |
+| `db.students.find({ city: { $ne: "Delhi" } })`              | city is NOT Delhi                |
+| `db.students.find({ city: { $in: ["Delhi", "Mumbai"] } })`  | city is Delhi OR Mumbai          |
+| `db.students.find({ city: { $nin: ["Delhi", "Mumbai"] } })` | city is NOT Delhi and NOT Mumbai |
+
+
+db.students.find({age:{$lt:18},age:{$gt:25},course:'english'})   
+Here if we give multiple conditions, the last condition only satisfies.
+Thats why Logical operator introduced. 
+
+
+Logical Operators:
+
+| Operator | Meaning                             |
+| -------- | ----------------------------------- |
+| `$and`   | All conditions must be true         |
+| `$or`    | At least one condition must be true |
+| `$not`   | condition must not match            |
+| `$nor`   | none of the condition must match    |
+
+
+Examples
+
+| Query                                                                     | Meaning                    |
+| ------------------------------------------------------------------------- | -------------------------- |
+| `db.students.find({ $and: [ { age: { $gt: 20 } }, { city: "Delhi" } ] })` | age > 20 AND city is Delhi |
+| `db.students.find({ $or: [ { age: { $lt: 21 } }, { city: "Mumbai" } ] })` | age < 21 OR city is Mumbai |
+| `db.students.find({ age: { $not: { $gt: 22 } } })`                        | NOT (age > 22)             |
+| `db.students.find({ $or: [ { age: { $lt: 21 } }, { city: "Mumbai" } ] })` | age < 21 Nor city is Mumbai|
+
+Projection:
+is used to display only the selected fields in the result. Using 1 we include the fields and using 0 we exclude fields.
+db.collection.find(filter, projection)
+filter(query) → which documents to select
+projection → which fields to show or hide
+
+db.students.find({}, { name: 1, city: 1 })
+find({},{name:1, _id:0}) , find({},{course:0 }) gives all doc that excluded course, find({}) gives all docs.
+{ name: 1, age: 0 } we cannot do this. only for id we can do it.
+
+
+Sorting and limiting:
+
+sort() arranges the documents in ascending (1) (A → Z or 0 → 9) or descending (-1) (Z → A or 9 → 0) order.
+limit() restricts the number of documents returned in the result.
+
+db.students.find().sort({ age: 1 })   //19, 20, 22
+db.students.find().sort({ age: -1 })   //22, 20, 19
+db.students.find({filter}).sort({ name: 1 })
+db.students.find({filter}).sort({ marks: -1,name: 1}) nok //we can give 2 conditions unlike projection
+
+db.students.find().limit(2)  //return only 2 documents
+
+Using sort() + limit() together:
+Get 2 youngest students -> db.students.find().sort({ age: 1 }).limit(2)
+Get 3 oldest students -> db.students.find().sort({ age: -1 }).limit(3)
+
+
+Cursor:
+
+MongoDB returns a cursor for find() operations
+A cursor allows iteration over documents using methods like forEach(), which helps process each record efficiently.
+
+
+
+| Method       | Purpose                            |Example                             |
+| ------------ | ---------------------------------- | ---------------------------------- |
+|  .forEach()  | Loop through each document         | `.forEach(doc => print(doc.name))` |
+|  .toArray()  | Convert all documents to an array  | `.toArray()`                       |
+|  .sort()     | Arrange result order               | `.sort({ marks: -1 })`             |
+|  .limit()    | Restrict number of results         | `.limit(3)`                        |
+|  .skip()     | Skip first few documents           | `.skip(5)`                         |
+|  .count()    | Count matching documents           | `.count()`                         |
+|  .pretty()   | Display results in readable format | `.pretty()`                        |
+
+
+1. forEach():  When we want to perform an action for every document.
+db.students.find().forEach(student => {
+  print(student.name);
+});
+
+db.students.find().forEach(s => {
+  print("Name:", s.name, "| Age:", s.age);
+});
+
+2. toArray():  Useful in Node.js or shell when you want to handle all documents together.
+db.students.find().toArray()
+OR
+let data = db.students.find().toArray(); console.log(data)
+
+3. Sort():  Arranges the result order.
+db.students.find().sort({ marks: -1 })
+
+4. .limit():   Restrict number of results.
+db.students.find().limit(3)   //Only first 3 documents are shown.
+
+
+5. .skip():   Skip a given number of documents.
+db.students.find().skip(2)   //Starts showing from the 3rd document.
+
+6. .count(): Count the number of matching documents.
+Count all documents:  db.students.find().count()
+
+Count() is old method. Now we use countDocuments({})
+db.students.countDocuments()  //10
+db.student.countDocuments({marks:{$gt:30}})   //no need of find()
+
+7. .pretty():  Displays documents in a readable (formatted) way.
+db.students.find().pretty()
+
+
+
+Regex: 
+
+Regex allows us to search by pattern, not by exact value.
+we can use Regex in two ways:
+
+1. /pattern/ (direct regex)
+2. $regex: "pattern" (regex operator)
+
+a. Find names starting with “Ra”:
+db.students.find({ name: /^Ra/ })
+OR (using $regex) : db.students.find({ name: { $regex: "^Ra" } })
+
+b. Ends With — $
+Find names ending with “it”:
+db.students.find({ name: /it$/ })
+
+c. Contains — no ^ or $
+Find names that contain “am” anywhere:
+db.students.find({ name: /am/ })
+
+d. Case Insensitive Search (i flag)
+Find names starting with a or A:
+db.students.find({ name: /^a/i })  //i makes it case-insensitive,
+
+e. With $regex + $options
+Another way to write case-insensitive search:
+db.students.find({
+  name: { $regex: "^a", $options: "i" }
+})
+
+Note: 
+db.students.find({ $and: [{ course: 'science' } , { name: { $regex: "a$", options:"i" }}]})
