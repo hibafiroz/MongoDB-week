@@ -1,0 +1,114 @@
+[
+  {
+    "0": {
+      "name": "hiba",
+      "course": "MERN Stack",
+      "marks": 93,
+      "isPassed": true,
+      "dob": "2003-06-25T00:00:00.000Z",
+      "joiningDate": "2025-05-01T00:00:00.000Z",
+      "subjects": [
+        "MongoDB",
+        "ExpressJS",
+        "React",
+        "NodeJS"
+      ],
+      "address": {
+        "street": "MG Road",
+        "city": "kannur",
+        "state": "kerala",
+        "pincode": 670642
+      },
+      "remarks": "Premium"
+    },
+    "_id": "68ff0a369d1e70c6f3cebea4"
+  },
+  {
+    "_id": "68ff0c0d9d1e70c6f3cebea8",
+    "name": "John Simon",
+    "course": "MEAN Stack",
+    "marks": 88,
+    "isPassed": true,
+    "dob": "2001-09-15T00:00:00.000Z",
+    "joiningDate": "2025-02-09T00:00:00.000Z",
+    "subjects": [
+      "MongoDB",
+      "ExpressJS",
+      "Angular",
+      "NodeJS"
+    ],
+    "address": {
+      "street": "Town Hall",
+      "city": "kannur",
+      "state": "kerala",
+      "pincode": 670323
+    },
+    "remarks": "regular"
+  },
+  {
+    "_id": "68ff0c0d9d1e70c6f3cebea6",
+    "name": "Mickele",
+    "course": "MERN Stack",
+    "marks": 89,
+    "isPassed": true,
+    "dob": "2003-03-03T00:00:00.000Z",
+    "joiningDate": "2025-08-04T00:00:00.000Z",
+    "subjects": [
+      "MongoDB",
+      "ExpressJS",
+      "React",
+      "NodeJS"
+    ],
+    "address": {
+      "street": "Mittayi Therivu",
+      "city": "Calicut",
+      "state": "kerala",
+      "pincode": 622642
+    },
+    "remarks": "Premium"
+  },
+  {
+    "_id": "68ff0c0d9d1e70c6f3cebea7",
+    "name": "Suhana",
+    "course": "Lecturer",
+    "marks": 45,
+    "isPassed": false,
+    "dob": "2004-12-01T00:00:00.000Z",
+    "joiningDate": "2025-10-02T00:00:00.000Z",
+    "subjects": [
+      "Urdu",
+      "Kannada",
+      "Hindi",
+      "English"
+    ],
+    "address": {
+      "street": "MG Road",
+      "city": "Bangalore",
+      "state": "karnataka",
+      "pincode": 293642
+    },
+    "remarks": "Premium"
+  },
+  {
+    "_id": "68ff0c0d9d1e70c6f3cebea5",
+    "name": "Monica",
+    "course": "Data analytics",
+    "marks": 91,
+    "isPassed": true,
+    "dob": "2002-03-21T00:00:00.000Z",
+    "joiningDate": "2024-11-01T00:00:00.000Z",
+    "subjects": [
+      "Storage",
+      "Analytic",
+      "Json",
+      "Databse"
+    ],
+    "address": {
+      "street": "Rajpet",
+      "city": "kochi",
+      "state": "kerala",
+      "pincode": 470642
+    },
+    "remarks": "Premium"
+  }
+]

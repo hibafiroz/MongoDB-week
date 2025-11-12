@@ -1,25 +1,44 @@
 // Bulk Write Operations
 
-//Bulk operations let you execute multiple write operations (insert, update, delete, replace) together in a single command
+//Bulk operations let us execute multiple write operations (insert, update, delete, replace) together in a single command
 // which is faster and more efficient than running them one by one.
 
 // Method: collection.bulkWrite([])
 
 db.collection.bulkWrite([
   { insertOne: { document: { name: "Hiba", age: 22 } } },
-  { updateOne: { filter: { name: "Hiba" }, update: { $set: { city: "Kochi" } } } },
+  { updateOne: { filter: { name: "Hiba" }, update: { $set: { city: "Kochi" } }, upsert: true } },
   { deleteOne: { filter: { name: "OldUser" } } }
 ]);
 
 
 //Types of bulk operators:
 
-// | Operation Type |   Example Key               | Description            |
-// | -------------- | -------------------------   | ---------------------- |
-// | Insert         |   insertOne                 | Adds a document        |
-// | Update         |   updateOne, updateMany     | Modifies matching docs |
-// | Replace        |   replaceOne                | Replaces entire doc    |
-// | Delete         |   deleteOne , deleteMany    | Removes matching docs  |
+// | Operation Type |   Example Key                  | Description            |
+// | -------------- |                                | ---------------------- |
+// | Insert         |   insertOne                    | Adds a document        | document
+// | Update         |   updateOne, updateMany        | Modifies matching docs | filter, update, upsert
+// | Replace        |   replaceOne                   | Replaces entire doc    | filter, replacement
+// | Delete         |   deleteOne , deleteMany       | Removes matching docs  | filter
+
+
+//replaceOne():
+// It completely replaces an existing document with a new one.
+// It does not update individual fields — it replaces the whole document.
+
+//syntax:
+// db.collection.replaceOne(
+//   <filter>,
+//   <replacement>,
+//   <options>
+// )
+
+db.students.replaceOne(
+  { name: "Hiba" },
+  { name: "Hiba", course: "MongoDB", marks: 95 },
+  { upsert: true }  //optional
+)
+
 
 
 // 1. findOneAndUpdate()

@@ -9,7 +9,7 @@
       { name: "John" }, // Filter
       { 
         $set: { age: 21, grade: "A" },
-        $setOnInsert: { createdAt: new Date() } // Only added when inserted
+        $setOnInsert: { createdAt: new Date() } // Only added when john exist if not nothing happens
       },
-      { upsert: true } // If "John" doesn't exist → creates new doc
+      { upsert: true } // If we add this it will creates new doc
     )
