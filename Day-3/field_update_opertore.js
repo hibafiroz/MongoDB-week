@@ -4,13 +4,13 @@
 // $set, $unset, $inc, $rename, $mul, $min, $max, $currentDate
 
     // 1. $set — set or update field value
-    await students.updateOne(
+    db.students.updateOne(
       { name: "Aliya" },
       { $set: { grade: "A", city: "London" } }
     );
 
     // 2. $unset — remove a field
-    await students.updateOne(
+    db.students.updateOne(
       { name: "Aliya" },
       { $unset: { city: "" } }
     );
@@ -22,7 +22,7 @@
     );
 
     // 4. $rename — rename a field
-    await students.updateOne(
+    db.students.updateOne(
       { name: "Aliya" },
       { $rename: { grade: "finalGrade" } }
     );
@@ -34,19 +34,19 @@
     );
 
     // 6. $min — update only if value is smaller
-    await students.updateOne(
+    db.students.updateOne(
       { name: "Aliya" },
       { $min: { lowestScore: 30 } }
     );
 
     // 7. $max — update only if value is greater
-    await students.updateOne(
+    db.students.updateOne(
       { name: "Aliya" },
       { $max: { highestScore: 90 } }
     );
 
     // 8. $currentDate — set current date/time
-    await students.updateOne(
+    db.students.updateOne(
       { name: "Aliya" },
       { $currentDate: { lastUpdated: true } }
     )

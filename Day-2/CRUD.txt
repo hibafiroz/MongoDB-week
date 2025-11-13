@@ -49,6 +49,7 @@ db.students.updateMany(
 | `$max`         | Set a field only if the new value is greater |
 | `$currentDate` | Set the field to the current date/time       |
 
+note: $set adds new field with multiple elemnets in array and later to push we use each to add multiple elemnts.
 
 a.$inc: Increase or decrease a numeric value.
 db.students.updateOne(

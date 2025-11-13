@@ -13,3 +13,10 @@
       },
       { upsert: true } // If we add this it will creates new doc
     )
+
+
+    
+//MongoDB has a special operator called $currentDate for this exact purpose.
+//But $currentDate automatically replaces that with the current date/time value.
+//whenever we update somthing, it shows lastUpadted time.
+    db.students.updateMany({},{$currentDate:{lastUpdated:true}})

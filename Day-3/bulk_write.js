@@ -52,15 +52,29 @@ db.collection.findOneAndUpdate(
   options
 )
 
-// Finds one student named “Aisha”
-// Increases her marks by 10
-// Returns the updated document
+// | Method               | Returns Updated Doc?   | Purpose                         |
+// | -------------------- | -------------------    | ------------------------------- |
+// | `updateOne()`        |     No                 | Just update                     |
+// | `findOneAndUpdate()` |     Yes                | Update **and** get updated data |
+
+
+db.users.findOneAndUpdate(
+  { name: "Hiba" },
+  { $set: { city: "Kochi" } },
+  { returnDocument: "after" }
+)
+// returnDocument: "before" - returns the document before it was updated (default)
+// returnDocument: "after" - returns the document after the update.
+
+//output:    { name: "Hiba", age: 22, city: "Kochi" }
+
 
 // 2. findOneAndReplace()
 // Replaces the entire document with a new one.
+//It’s like replaceOne() but also returns the old or new document
 // Example
 
-const result = await students.findOneAndReplace(
+db.students.findOneAndReplace(
   { name: "Aisha" },
   { name: "Aisha", marks: 95, subject: "Math" },
   { returnDocument: "after" }
@@ -71,6 +85,16 @@ const result = await students.findOneAndReplace(
 // Only the fields in the new object remain
 // // Finds a document and deletes it — also returns the deleted document.
 
-// All three (findOneAndUpdate, findOneAndReplace, findOneAndDelete) operate atomically.
-// Useful when we want to modify + immediately get the affected document.
-// Option { returnDocument: "after" } helps get the updated version bcz by default, MongoDB returns the old one.
+// these 2 Useful when we want to modify and immediately get the affected document.
+
+
+// 3. findOneAndDelete():
+
+// It finds one document that matches your filter
+// and deletes it — then returns the deleted document.
+// So you can see what got deleted.
+
+db.users.findOneAndDelete({ name: "Hiba" })
+
+// deleteOne() - deletes but returns just { acknowledged, deletedCount }
+// findOneAndDelete() - deletes and returns the deleted document itself
