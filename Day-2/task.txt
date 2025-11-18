@@ -1,0 +1,467 @@
+1. Update a student’s marks or course using $set.
+db.students.updateOne(
+  { name: "hiba" },
+  { $set: { marks: 95 } }
+)
+[
+  {
+  _id: ObjectId("6739c9f4f1abce004bb9e1a1"),
+  name: "hiba",
+  course: "MERN Stack",
+  marks: 95,
+  isPassed: true,
+  dob: ISODate("2003-06-25T00:00:00Z"),
+  joiningDate: ISODate("2025-05-01T00:00:00Z"),
+  subjects: [ "MongoDB", "ExpressJS", "React", "NodeJS" ],
+  address: {
+    street: "MG Road",
+    city: "kannur",
+    state: "kerala",
+    pin: 670642
+  },
+    remarks: "Premium"
+  },
+
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a2"),
+    name: "Monica",
+    course: "Data analytics",
+    marks: 88,
+    isPassed: true,
+    dob: ISODate("2002-03-21T00:00:00Z"),
+    joiningDate: ISODate("2024-11-01T00:00:00Z"),
+    subjects: [ "Storage", "Analytic", "Json", "Databse" ],
+    address: {
+      street: "Rajpet",
+      city: "kochi",
+      state: "kerala",
+      pincode: 470642
+    },
+    remarks: "Premium"
+  },
+
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a3"),
+    name: "Suhana",
+    course: "Lecturer",
+    marks: 43,
+    isPassed: false,
+    dob: ISODate("2004-12-01T00:00:00Z"),
+    joiningDate: ISODate("2025-10-02T00:00:00Z"),
+    subjects: [ "Urdu", "Kannada", "Hindi", "English" ],
+    address: {
+      street: "MG Road",
+      city: "Bangalore",
+      state: "karnataka",
+      pincode: 293642
+    },
+    remarks: "Premium"
+  },
+
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a4"),
+    name: "John Simon",
+    course: "MEAN Stack",
+    marks: 86,
+    isPassed: true,
+    dob: ISODate("2001-09-15T00:00:00Z"),
+    joiningDate: ISODate("2025-02-09T00:00:00Z"),
+    subjects: [ "MongoDB", "ExpressJS", "Angular", "NodeJS" ],
+    address: {
+      street: "Town Hall",
+      city: "kannur",
+      state: "kerala",
+      pincode: 670323
+    },
+    remarks: "Regular"
+  }, 
+  {
+  _id: ObjectId("6739c9f4f1abce004bb9e1a4"),
+  name: "Meena",
+  course: "Math",
+  marks: 84,
+  isPassed: true,
+  dob: ISODate("2002-09-15T00:00:00Z"),
+  joiningDate: ISODate("2025-02-09T00:00:00Z"),
+  subjects: [ "statistics", "Algebraic" ],
+  address: {
+    street: "30 cross udaipur",
+    city: "andrah",
+    state: "andhra pradesh",
+    pincode: 734323
+  },
+  remarks: "Excellent performance"
+}
+]
+
+2. Increase marks of all passed students by 5 using $inc.
+db.students.updateMany(
+  { isPassed: true },
+  { $inc: { marks: 5 } }
+)
+[
+  {
+  _id: ObjectId("6739c9f4f1abce004bb9e1a1"),
+  name: "hiba",
+  course: "MERN Stack",
+  marks: 100,
+  isPassed: true,
+  dob: ISODate("2003-06-25T00:00:00Z"),
+  joiningDate: ISODate("2025-05-01T00:00:00Z"),
+  subjects: [ "MongoDB", "ExpressJS", "React", "NodeJS" ],
+  address: {
+    street: "MG Road",
+    city: "kannur",
+    state: "kerala",
+    pin: 670642
+  },
+  remarks: "Premium"
+},
+
+  {
+  _id: ObjectId("6739c9f4f1abce004bb9e1a2"),
+  name: "Monica",
+  course: "Data analytics",
+  marks: 93,
+  isPassed: true,
+  dob: ISODate("2002-03-21T00:00:00Z"),
+  joiningDate: ISODate("2024-11-01T00:00:00Z"),
+  subjects: [ "Storage", "Analytic", "Json", "Databse" ],
+  address: {
+    street: "Rajpet",
+    city: "kochi",
+    state: "kerala",
+    pincode: 470642
+  },
+  remarks: "Premium"
+},
+
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a3"),
+    name: "Suhana",
+    course: "Lecturer",
+    marks: 43,
+    isPassed: false,
+    dob: ISODate("2004-12-01T00:00:00Z"),
+    joiningDate: ISODate("2025-10-02T00:00:00Z"),
+    subjects: [ "Urdu", "Kannada", "Hindi", "English" ],
+    address: {
+      street: "MG Road",
+      city: "Bangalore",
+      state: "karnataka",
+      pincode: 293642
+    },
+    remarks: "Premium"
+  },
+
+  {
+  _id: ObjectId("6739c9f4f1abce004bb9e1a4"),
+  name: "John Simon",
+  course: "MEAN Stack",
+  marks: 91,
+  isPassed: true,
+  dob: ISODate("2001-09-15T00:00:00Z"),
+  joiningDate: ISODate("2025-02-09T00:00:00Z"),
+  subjects: [ "MongoDB", "ExpressJS", "Angular", "NodeJS" ],
+  address: {
+    street: "Town Hall",
+    city: "kannur",
+    state: "kerala",
+    pincode: 670323
+  },
+  remarks: "Excellent performance"
+},
+{
+  _id: ObjectId("6739c9f4f1abce004bb9e1a4"),
+  name: "Meena",
+  course: "Math",
+  marks: 89,
+  isPassed: true,
+  dob: ISODate("2002-09-15T00:00:00Z"),
+  joiningDate: ISODate("2025-02-09T00:00:00Z"),
+  subjects: [ "statistics", "Algebraic" ],
+  address: {
+    street: "30 cross udaipur",
+    city: "andrah",
+    state: "andhra pradesh",
+    pincode: 734323
+  },
+  remarks: "Excellent performance"
+}
+]
+
+3. Remove the remarks field from all documents using $unset.
+db.students.updateMany(
+  {},
+  { $unset: { remarks: "" } }
+)
+[
+  {
+  _id: ObjectId("6739c9f4f1abce004bb9e1a1"),
+  name: "hiba",
+  course: "MERN Stack",
+  marks: 100,
+  isPassed: true,
+  dob: ISODate("2003-06-25T00:00:00Z"),
+  joiningDate: ISODate("2025-05-01T00:00:00Z"),
+  subjects: [ "MongoDB", "ExpressJS", "React", "NodeJS" ],
+  address: {
+    street: "MG Road",
+    city: "kannur",
+    state: "kerala",
+    pin: 670642
+  }
+},
+
+  {
+  _id: ObjectId("6739c9f4f1abce004bb9e1a2"),
+  name: "Monica",
+  course: "Data analytics",
+  marks: 93,
+  isPassed: true,
+  dob: ISODate("2002-03-21T00:00:00Z"),
+  joiningDate: ISODate("2024-11-01T00:00:00Z"),
+  subjects: [ "Storage", "Analytic", "Json", "Databse" ],
+  address: {
+    street: "Rajpet",
+    city: "kochi",
+    state: "kerala",
+    pincode: 470642
+  }
+},
+
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a3"),
+    name: "Suhana",
+    course: "Lecturer",
+    marks: 43,
+    isPassed: false,
+    dob: ISODate("2004-12-01T00:00:00Z"),
+    joiningDate: ISODate("2025-10-02T00:00:00Z"),
+    subjects: [ "Urdu", "Kannada", "Hindi", "English" ],
+    address: {
+      street: "MG Road",
+      city: "Bangalore",
+      state: "karnataka",
+      pincode: 293642
+    }
+  },
+
+  {
+  _id: ObjectId("6739c9f4f1abce004bb9e1a4"),
+  name: "John Simon",
+  course: "MEAN Stack",
+  marks: 91,
+  isPassed: true,
+  dob: ISODate("2001-09-15T00:00:00Z"),
+  joiningDate: ISODate("2025-02-09T00:00:00Z"),
+  subjects: [ "MongoDB", "ExpressJS", "Angular", "NodeJS" ],
+  address: {
+    street: "Town Hall",
+    city: "kannur",
+    state: "kerala",
+    pincode: 670323
+  }
+},
+{
+  _id: ObjectId("6739c9f4f1abce004bb9e1a4"),
+  name: "Meena",
+  course: "Math",
+  marks: 89,
+  isPassed: true,
+  dob: ISODate("2002-09-15T00:00:00Z"),
+  joiningDate: ISODate("2025-02-09T00:00:00Z"),
+  subjects: [ "statistics", "Algebraic" ],
+  address: {
+    street: "30 cross udaipur",
+    city: "andrah",
+    state: "andhra pradesh",
+    pincode: 734323
+  }
+}
+]
+
+4. Delete one student whose course is "Math".
+db.students.deleteOne({course:"Math"})
+[
+  {
+  _id: ObjectId("6739c9f4f1abce004bb9e1a1"),
+  name: "hiba",
+  course: "MERN Stack",
+  marks: 100,
+  isPassed: true,
+  dob: ISODate("2003-06-25T00:00:00Z"),
+  joiningDate: ISODate("2025-05-01T00:00:00Z"),
+  subjects: [ "MongoDB", "ExpressJS", "React", "NodeJS" ],
+  address: {
+    street: "MG Road",
+    city: "kannur",
+    state: "kerala",
+    pin: 670642
+  }
+},
+
+  {
+  _id: ObjectId("6739c9f4f1abce004bb9e1a2"),
+  name: "Monica",
+  course: "Data analytics",
+  marks: 93,
+  isPassed: true,
+  dob: ISODate("2002-03-21T00:00:00Z"),
+  joiningDate: ISODate("2024-11-01T00:00:00Z"),
+  subjects: [ "Storage", "Analytic", "Json", "Databse" ],
+  address: {
+    street: "Rajpet",
+    city: "kochi",
+    state: "kerala",
+    pincode: 470642
+  }
+},
+
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a3"),
+    name: "Suhana",
+    course: "Lecturer",
+    marks: 43,
+    isPassed: false,
+    dob: ISODate("2004-12-01T00:00:00Z"),
+    joiningDate: ISODate("2025-10-02T00:00:00Z"),
+    subjects: [ "Urdu", "Kannada", "Hindi", "English" ],
+    address: {
+      street: "MG Road",
+      city: "Bangalore",
+      state: "karnataka",
+      pincode: 293642
+    }
+  },
+
+  {
+  _id: ObjectId("6739c9f4f1abce004bb9e1a4"),
+  name: "John Simon",
+  course: "MEAN Stack",
+  marks: 91,
+  isPassed: true,
+  dob: ISODate("2001-09-15T00:00:00Z"),
+  joiningDate: ISODate("2025-02-09T00:00:00Z"),
+  subjects: [ "MongoDB", "ExpressJS", "Angular", "NodeJS" ],
+  address: {
+    street: "Town Hall",
+    city: "kannur",
+    state: "kerala",
+    pincode: 670323
+  }
+}
+]
+
+5. Show only name, course, and marks for all students.
+db.students.find({},{name:1,course:1,marks:1,_id:0})
+[
+  { name: "hiba", course: "MERN Stack", marks: 100 },
+  { name: "Monica", course: "Data analytics", marks: 93 },
+  { name: "Suhana", course: "Lecturer", marks: 43 },
+  { name: "John Simon", course: "MEAN Stack", marks: 91 }
+]
+
+6. Find students with marks &lt; 80 and course = "Lecturer".
+db.students.find({$and: [{ marks: { $lt: 80 } },{ course: "Lecturer" }]})
+[
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a3"),
+    name: "Suhana",
+    course: "Lecturer",
+    marks: 43,
+    isPassed: false,
+    dob: ISODate("2004-12-01T00:00:00Z"),
+    joiningDate: ISODate("2025-10-02T00:00:00Z"),
+    subjects: [ "Urdu", "Kannada", "Hindi", "English" ],
+    address: {
+      street: "MG Road",
+      city: "Bangalore",
+      state: "karnataka",
+      pincode: 293642
+    }
+  }
+]
+
+7. Sort results by marks (highest first) and limit to 3 results.
+db.students.find().sort({marks:-1}).limit(3)
+[
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a1"),
+    name: "hiba",
+    course: "MERN Stack",
+    marks: 100,
+    isPassed: true,
+    dob: ISODate("2003-06-25T00:00:00Z"),
+    joiningDate: ISODate("2025-05-01T00:00:00Z"),
+    subjects: [ "MongoDB", "ExpressJS", "React", "NodeJS" ],
+    address: {
+      street: "MG Road",
+      city: "kannur",
+      state: "kerala",
+      pin: 670642
+    }
+  },
+
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a2"),
+    name: "Monica",
+    course: "Data analytics",
+    marks: 93,
+    isPassed: true,
+    dob: ISODate("2002-03-21T00:00:00Z"),
+    joiningDate: ISODate("2024-11-01T00:00:00Z"),
+    subjects: [ "Storage", "Analytic", "Json", "Databse" ],
+    address: {
+      street: "Rajpet",
+      city: "kochi",
+      state: "kerala",
+      pincode: 470642
+    }
+  },
+
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a4"),
+    name: "John Simon",
+    course: "MEAN Stack",
+    marks: 91,
+    isPassed: true,
+    dob: ISODate("2001-09-15T00:00:00Z"),
+    joiningDate: ISODate("2025-02-09T00:00:00Z"),
+    subjects: [ "MongoDB", "ExpressJS", "Angular", "NodeJS" ],
+    address: {
+      street: "Town Hall",
+      city: "kannur",
+      state: "kerala",
+      pincode: 670323
+    }
+  }
+]
+
+8. Use a regex query to find students whose name starts with 'J'.
+db.students.find({name:{$regex: /^J/i}})
+[
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a4"),
+    name: "John Simon",
+    course: "MEAN Stack",
+    marks: 91,
+    isPassed: true,
+    dob: ISODate("2001-09-15T00:00:00Z"),
+    joiningDate: ISODate("2025-02-09T00:00:00Z"),
+    subjects: [ "MongoDB", "ExpressJS", "Angular", "NodeJS" ],
+    address: {
+      street: "Town Hall",
+      city: "kannur",
+      state: "kerala",
+      pincode: 670323
+    }
+  }
+]
+
+9. Loop through all documents using forEach() and print student names.
+db.students.find().forEach(student=>{print(student.name)})
+hiba
+Monica
+Suhana
+John Simon

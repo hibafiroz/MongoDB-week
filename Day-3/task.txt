@@ -514,7 +514,7 @@ db.students.updateMany({},{$pull:{activities:"Music"}})
     subjects: [ 'MongoDB', 'ExpressJS', 'React', 'NodeJS' ],
     attendence: 95,
     totalMarks: 93,
-    activities: ["Sports", "Music", "Art"]
+    activities: ["Sports", "Art"]
   },
   {
     _id: ObjectId('68ff0c0d9d1e70c6f3cebea5'),
@@ -533,7 +533,7 @@ db.students.updateMany({},{$pull:{activities:"Music"}})
     remarks: 'Premium',
     attendence: 95,
     totalMarks: 91,
-    activities: ["Sports", "Music", "Art"]
+    activities: ["Sports", "Art"]
   },
   {
     _id: ObjectId('68ff0c0d9d1e70c6f3cebea6'),
@@ -552,7 +552,7 @@ db.students.updateMany({},{$pull:{activities:"Music"}})
     remarks: 'Premium',
     attendence: 95,
     totalMarks: 89,
-    activities: ["Sports", "Music", "Art"]
+    activities: ["Sports", "Art"]
   },
   {
     _id: ObjectId('68ff0c0d9d1e70c6f3cebea7'),
@@ -571,7 +571,7 @@ db.students.updateMany({},{$pull:{activities:"Music"}})
     remarks: 'Premium',
     attendence: 95,
     totalMarks: 45,
-    activities: ["Sports", "Music", "Art"]
+    activities: ["Sports", "Art"]
   },
   {
     _id: ObjectId('68ff0c0d9d1e70c6f3cebea8'),
@@ -590,7 +590,7 @@ db.students.updateMany({},{$pull:{activities:"Music"}})
     remarks: 'regular',
     attendence: 95,
     totalMarks: 88,
-    activities: ["Sports", "Music", "Art"]
+    activities: ["Sports", "Art"]
   }
 ]
 
@@ -912,26 +912,26 @@ db.students.updateMany({},{$set:{activities.$[elem]:"Travel"}},{arrayFilters:[{e
 
 
 9. Upsert a student named Neha if not already present.
-db.students.updateOne({name: "Neha"},{
-    name: 'Neha',
-    activities: [ 'Travel', 'Dance', 'Coding' ],
-    attendence: 50,
-    course: 'MERN Stack',
-    isPassed: false,
-    joiningDate: new Date(),
-    remarks: 'New',
-    totalMarks: 44})
+db.students.updateOne(
+  { name:"Neha" },{
+    $set:{
+      name:"Neha",
+      activities:["Travel", "Dance", "Coding"],
+      attendence:50,
+      course:"MERN Stack",
+      isPassed:false,
+      joiningDate:new Date(),
+      remarks:"New",
+      totalMarks:44
+    }
+  },{ upsert:true })
+
 
 [
   {
     _id: ObjectId('68ff0a369d1e70c6f3cebea4'),
     attendence: 95,
-    address: {
-      street: 'MG Road',
-      city: 'kannur',
-      state: 'kerala',
-      pincode: 670642
-    },
+    address: { street: 'MG Road', city: 'kannur', state: 'kerala', pincode: 670642 },
     course: 'MERN Stack',
     dob: ISODate('2003-06-25T00:00:00.000Z'),
     isPassed: true,
@@ -939,10 +939,9 @@ db.students.updateOne({name: "Neha"},{
     name: 'hiba',
     remarks: 'Premium',
     subjects: [ 'MongoDB', 'ExpressJS', 'React', 'NodeJS' ],
-    attendence: 95,
     totalMarks: 93,
-    activities: ["Travel", "Dance","Coding"],
-    lastUpdated: ISODate("2025-11-13T11:45:00.000Z")
+    activities: ['Travel','Dance','Coding'],
+    lastUpdated: ISODate('2025-11-13T11:45:00.000Z')
   },
   {
     _id: ObjectId('68ff0c0d9d1e70c6f3cebea5'),
@@ -951,18 +950,13 @@ db.students.updateOne({name: "Neha"},{
     isPassed: true,
     dob: ISODate('2002-03-21T00:00:00.000Z'),
     joiningDate: ISODate('2024-11-01T00:00:00.000Z'),
-    subjects: [ 'Storage', 'Analytic', 'Json', 'Databse' ],
-    address: {
-      street: 'Rajpet',
-      city: 'kochi',
-      state: 'kerala',
-      pincode: 470642
-    },
+    subjects: [ 'Storage','Analytic','Json','Databse' ],
+    address: { street: 'Rajpet', city: 'kochi', state: 'kerala', pincode: 470642 },
     remarks: 'Premium',
     attendence: 95,
     totalMarks: 91,
-    activities: ["Travel", "Dance","Coding"],
-    lastUpdated: ISODate("2025-11-13T11:45:00.000Z")
+    activities: ['Travel','Dance','Coding'],
+    lastUpdated: ISODate('2025-11-13T11:45:00.000Z')
   },
   {
     _id: ObjectId('68ff0c0d9d1e70c6f3cebea6'),
@@ -971,18 +965,13 @@ db.students.updateOne({name: "Neha"},{
     isPassed: true,
     dob: ISODate('2003-03-03T00:00:00.000Z'),
     joiningDate: ISODate('2025-08-04T00:00:00.000Z'),
-    subjects: [ 'MongoDB', 'ExpressJS', 'React', 'NodeJS' ],
-    address: {
-      street: 'Mittayi Therivu',
-      city: 'Calicut',
-      state: 'kerala',
-      pincode: 622642
-    },
+    subjects: [ 'MongoDB','ExpressJS','React','NodeJS' ],
+    address: { street: 'Mittayi Therivu', city: 'Calicut', state: 'kerala', pincode: 622642 },
     remarks: 'Premium',
     attendence: 95,
     totalMarks: 89,
-    activities: ["Travel", "Dance","Coding"],
-    lastUpdated: ISODate("2025-11-13T11:45:00.000Z")
+    activities: ['Travel','Dance','Coding'],
+    lastUpdated: ISODate('2025-11-13T11:45:00.000Z')
   },
   {
     _id: ObjectId('68ff0c0d9d1e70c6f3cebea7'),
@@ -991,18 +980,13 @@ db.students.updateOne({name: "Neha"},{
     isPassed: false,
     dob: ISODate('2004-12-01T00:00:00.000Z'),
     joiningDate: ISODate('2025-10-02T00:00:00.000Z'),
-    subjects: [ 'Urdu', 'Kannada', 'Hindi', 'English' ],
-    address: {
-      street: 'MG Road',
-      city: 'Bangalore',
-      state: 'karnataka',
-      pincode: 293642
-    },
+    subjects: [ 'Urdu','Kannada','Hindi','English' ],
+    address: { street: 'MG Road', city: 'Bangalore', state: 'karnataka', pincode: 293642 },
     remarks: 'Premium',
     attendence: 95,
     totalMarks: 45,
-    activities: ["Travel", "Dance","Coding"],
-    lastUpdated: ISODate("2025-11-13T11:45:00.000Z")
+    activities: ['Travel','Dance','Coding'],
+    lastUpdated: ISODate('2025-11-13T11:45:00.000Z')
   },
   {
     _id: ObjectId('68ff0c0d9d1e70c6f3cebea8'),
@@ -1011,18 +995,24 @@ db.students.updateOne({name: "Neha"},{
     isPassed: true,
     dob: ISODate('2001-09-15T00:00:00.000Z'),
     joiningDate: ISODate('2025-02-09T00:00:00.000Z'),
-    subjects: [ 'MongoDB', 'ExpressJS', 'Angular', 'NodeJS' ],
-    address: {
-      street: 'Town Hall',
-      city: 'kannur',
-      state: 'kerala',
-      pincode: 670323
-    },
+    subjects: [ 'MongoDB','ExpressJS','Angular','NodeJS' ],
+    address: { street: 'Town Hall', city: 'kannur', state: 'kerala', pincode: 670323 },
     remarks: 'regular',
     attendence: 95,
     totalMarks: 88,
-    activities: ["Travel", "Dance","Coding"],
-    lastUpdated: ISODate("2025-11-13T11:45:00.000Z")
+    activities: ['Travel','Dance','Coding'],
+    lastUpdated: ISODate('2025-11-13T11:45:00.000Z')
+  },
+  {
+    _id: ObjectId('68ff1b3a9d1e70c6f3cebeaa'),
+    name: 'Neha',
+    activities: ['Travel','Dance','Coding'],
+    attendence: 50,
+    course: 'MERN Stack',
+    isPassed: false,
+    joiningDate: ISODate('2025-11-18T00:00:00.000Z'),
+    remarks: 'New',
+    totalMarks: 44
   }
 ]
 

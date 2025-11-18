@@ -1,0 +1,104 @@
+1. Create a database named school and a collection named students.
+use school
+db.createCollection("students")
+
+2. Each student should have details like name, course, marks, isPassed, dob, joiningDate, subjects, address, and remarks, using different data types.
+db.students.insertMany([
+  {name: "hiba",course: "MERN Stack",marks:90,isPassed:true,dob: new Date("2003-06-25"),joiningDate: new Date("2025-05-01"),subjects: ["MongoDB", "ExpressJS", "React","NodeJS"],
+  address: {street: "MG Road",city:"kannur",state:"kerala",pin: 670642},remarks:Premium
+  },
+  {name: "Monica",course: "Data analytics",marks:88,isPassed:true,dob: new Date("2002-03-21"),joiningDate: new Date("2024-11-01"),subjects: ['Storage', 'Analytic', 'Json', 'Databse'],
+  address: {street: 'Rajpet',city: 'kochi',state: 'kerala',pincode: 470642},remarks:"Premium"
+  },
+  {name: "Suhana",course:"Lecturer",marks:43,isPassed:false,dob:new Date("2004-12-01"),joiningDate: new Date("2025-10-02"),subjects: ['Urdu', 'Kannada', 'Hindi', 'English'],
+  address: {street: 'MG Road',city: 'Bangalore',state: 'karnataka',pincode: 293642},remarks:"Premium"
+  },
+  {name: "John Simon",course:"MEAN Stack",marks: 86,isPassed: true,dob: new Date("2001-09-15"),joiningDate: new Date("2025-02-09"),subjects: ['MongoDB', 'ExpressJS', 'Angular', 'NodeJS'],
+  address: {street: 'Town Hall',city: 'kannur',state: 'kerala',pincode: 670323},remarks: "Regular"
+  }
+]);
+
+3. Display all inserted documents.
+db.students.find()
+[
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a1"),
+    name: "hiba",
+    course: "MERN Stack",
+    marks: 90,
+    isPassed: true,
+    dob: ISODate("2003-06-25T00:00:00Z"),
+    joiningDate: ISODate("2025-05-01T00:00:00Z"),
+    subjects: [ "MongoDB", "ExpressJS", "React", "NodeJS" ],
+    address: {
+      street: "MG Road",
+      city: "kannur",
+      state: "kerala",
+      pin: 670642
+    },
+    remarks: "Premium"
+  },
+
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a2"),
+    name: "Monica",
+    course: "Data analytics",
+    marks: 88,
+    isPassed: true,
+    dob: ISODate("2002-03-21T00:00:00Z"),
+    joiningDate: ISODate("2024-11-01T00:00:00Z"),
+    subjects: [ "Storage", "Analytic", "Json", "Databse" ],
+    address: {
+      street: "Rajpet",
+      city: "kochi",
+      state: "kerala",
+      pincode: 470642
+    },
+    remarks: "Premium"
+  },
+
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a3"),
+    name: "Suhana",
+    course: "Lecturer",
+    marks: 43,
+    isPassed: false,
+    dob: ISODate("2004-12-01T00:00:00Z"),
+    joiningDate: ISODate("2025-10-02T00:00:00Z"),
+    subjects: [ "Urdu", "Kannada", "Hindi", "English" ],
+    address: {
+      street: "MG Road",
+      city: "Bangalore",
+      state: "karnataka",
+      pincode: 293642
+    },
+    remarks: "Premium"
+  },
+
+  {
+    _id: ObjectId("6739c9f4f1abce004bb9e1a4"),
+    name: "John Simon",
+    course: "MEAN Stack",
+    marks: 86,
+    isPassed: true,
+    dob: ISODate("2001-09-15T00:00:00Z"),
+    joiningDate: ISODate("2025-02-09T00:00:00Z"),
+    subjects: [ "MongoDB", "ExpressJS", "Angular", "NodeJS" ],
+    address: {
+      street: "Town Hall",
+      city: "kannur",
+      state: "kerala",
+      pincode: 670323
+    },
+    remarks: "Regular"
+  }
+]
+
+4. Extract the creation time of each document from its _id.
+db.students.find().forEach((t)=>{
+    print(t.name+'-'+t._id.getTimestamp())
+})
+Hiba-Tue Nov 12 2025 14:33:21 GMT+0530
+Monica-Tue Nov 12 2025 14:33:21 GMT+0530
+Suhana-Tue Nov 12 2025 14:33:21 GMT+0530
+John Simon-Tue Nov 12 2025 14:33:21 GMT+0530
