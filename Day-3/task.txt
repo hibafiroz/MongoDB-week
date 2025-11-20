@@ -1,5 +1,5 @@
 1. Add a new field attendance: 90 for all students using $set.
-db.students.updateMany({}, {$addToSet:{attendance:90}})
+db.students.updateMany({}, {$set:{attendance:90}})
 [
   {
     _id: ObjectId('68ff0a369d1e70c6f3cebea4'),

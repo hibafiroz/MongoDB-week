@@ -1,0 +1,35 @@
+Document Embedding:
+
+Storing related data directly within a documnt as nested objects or arrays.
+It keeps all the information together which makes read very fast bcz MongoDB can fetch everything in one query without joining other collections.
+
+When to Use Embedding:
+1. Data is always accessed together:
+If we always read the parent and child data in the same query, embedding is perfect.
+Example: Blog post + its comments.
+
+2. One-to-few relationship:
+If there are only a few related items, it fits nicely inside a single document.
+Example: User + a few addresses.
+
+3. Document size stays reasonable:
+MongoDB has a 16MB document size limit.
+Embedding is good as long as adding child data won’t make the document grow too large.
+
+Document References:
+
+Referencing means storing only an ID of the related document instead of storing the full related data inside the document.
+The documents stay separate, but they remain connected through this reference.
+It’s useful then the related data is large or reused or wanna update individeually
+
+When to Use References:
+1. Many-to-Many Relationships:
+
+2. Large or Frequently Changing Data:
+Referenced data lives in its own document, so updates touch only that document.
+This makes operations faster and avoids rewriting the parent document.
+
+3. Data Accessed Independently:
+If the child is often accessed without the parent, it deserves its own collection.
+ex:A list of products accessed by many parts of the app, not just the user page.
+
