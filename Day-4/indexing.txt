@@ -1,0 +1,77 @@
+Indexing:
+
+An index in MongoDB is a special data structure that keeps a small, sorted version of specific fields so MongoDB can find documents quickly without scanning the whole collection. It makes read operations much faster
+Without an index, MongoDB performs a collection scan (COLLSCAN)
+> checks every document
+> slow for large collections
+
+With an index, MongoDB performs an index scan (IXSCAN)
+> jumps directly to the matching values
+> skips unnecessary documents
+> fast even for millions of records
+This reduces the number of documents examined.
+
+
+> Default _id Index:
+whenever we create collections, a default index gets created on _id field and it never allows to drop it.
+The _id index is the built-in primary index of every collection. It ensure fast lookups and unique documents. 
+
+
+> Creating an Index:
+Creating an index tells MongoDB to build a sorted structure based on a field so queries on that field become fast.
+Example:
+db.users.createIndex({ age: 1 })  // ascending index
+db.users.createIndex({ age: -1 })  // descending index
+This makes queries on age extremely efficient.
+
+
+> Deleting an Index
+Deleting an index means removes it when it is no longer useful.
+Bcz every extra index slows down the write operations (insert/update/delete)
+Bcz MongoDB must update the index each time one of those operations happen
+Example:
+db.users.dropIndex({ age: 1 })
+db.users.dropIndex({ age: -1 })
+
+
+> When to Use Indexes:
+a. A field is searched repeatedly
+b. Query returns a small portion (10–20%) of the collection
+c. Sorting or filtering happens often on a field
+
+
+> When NOT to Use Indexes:
+a. Field is rarely searched
+b. Query returns most of the collection (80–90%)
+Examples:
+Boolean field (true/false)
+Gender field (male/female)
+
+
+> Using explain():
+explain() shows how MongoDB executes a query.
+It does NOT return actual data, it only returns performance details.
+Example:
+db.users.find({ age: 25 }).explain()
+It telles: Whether index was used, Whether it did COLLSCAN or IXSCAN, Query planning details
+
+
+> explain("executionStats"):
+Runs the query and shows real performance statistics:
+Exampel:
+db.users.find({ age: 25 }).explain("executionStats")
+
+It shows only important fields:
+a. nReturned: number of documents returned
+b. executionTimeMillis: time taken to run the query
+c. totalDocsExamined: number of documents scanned
+d. stage: "COLLSCAN" → collection scan
+d. stage: "IXSCAN" → index scan
+
+
+Note: 
+To get the number of documnts returned using find() is db.collectiton.find({...}).count()
+To clear terminal : cls (clear shell)
+To delete collection : db.collection.drop()
+To remove Index : db.collection.dropIndex({age(field) : 1(ascending)})
+To check how many index present : db.collection.getIndexes()

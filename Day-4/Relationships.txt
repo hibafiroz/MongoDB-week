@@ -1,0 +1,130 @@
+MongoDB Data Relationships:
+
+1. One-to-One (1:1):
+A one-to-one relationship means one parent document stores the reference to exactly one child document.
+Parent stores the reference of the child.
+Example:
+> User = Profile
+> Person = Passport
+
+> users
+{
+  "_id": 1,
+  "name": "Hiba",
+  "profileId": 101
+}
+
+> profiles
+{
+  "_id": 101,
+  "age": 21,
+  "bio": "Full stack developer"
+}
+
+And we find with query using lookup:
+db.users.aggregate([
+  { 
+    $lookup: {
+      from: "profiles",
+      localField: "profileId",
+      foreignField: "_id",
+      as: "profile"
+    }
+  }
+]);
+
+When to use:
+> When child is small
+> When child is optionally accessed
+
+
+2. One-to-Many (1:M):
+A one-to-many relationship means multiple child documents store a reference to the same parent document.
+Child stores the parent reference bcz children can grow, parent should not have huge arrays
+example:
+> User = Posts
+> post = comments
+> chat = messages
+> product = review
+
+> categories
+{
+  "_id": 10,
+  "name": "Makeup"
+}
+
+> products
+{
+  "_id": 501,
+  "name": "Lipstick",
+  "categoryId": 10
+}
+
+Query Example:
+db.categories.aggregate([
+  {
+    $lookup: {
+      from: "products",
+      localField: "_id",
+      foreignField: "categoryId",
+      as: "products"
+    }
+  }
+])
+
+When to use:
+> Children can grow big
+> Parent should remain small
+
+
+3. Many-to-Many (M:M):
+A many-to-many relationship means both sides require references, and this is managed using a separate linking collection that stores references to both documents.
+Example:
+> Students = courses
+> users = followers
+> posts = tags
+Why parent/child cannot store arrays? bcz both can grow too much:
+A student may take 20 courses and a course may have 200 students so arrays would explode in size which is bad practice
+
+So the solution is Use a Linking / Bridge Collection.
+Students
+{ "_id": 1, "name": "Hiba" }
+
+Courses
+{ "_id": 301, "title": "MongoDB" }
+
+Students_Courses (linking collection)
+{ "studentId": 1, "courseId": 301 }
+
+Query Example
+Get student with all their courses
+db.students.aggregate([
+  {
+    $lookup: {
+      from: "students_courses",
+      localField: "_id",
+      foreignField: "studentId",
+      as: "links"
+    }
+  },
+  {
+    $lookup: {
+      from: "courses",
+      localField: "links.courseId",
+      foreignField: "_id",
+      as: "courses"
+    }
+  }
+]);
+
+output:
+{
+  "_id": 1,
+  "name": "Hiba",
+  "courses": [
+    { "_id": 301, "title": "MongoDB" }
+  ]
+}
+When to use:
+> Both sides can grow a lot
+> Pure many-to-many relationships

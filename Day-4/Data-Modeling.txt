@@ -1,0 +1,96 @@
+Data Modeling & Storage Concepts:
+
+1. Data Modeling:
+Data modeling means designing:
+> how data is stored in collections,
+> how documents are structured and
+> how relationships btw documents are managed.
+
+
+2. System Storage Basics:
+MongoDB stores data on disk, but uses RAM for fast access.
+
+a. RAM —> Random Access Memory.
+> It is Temporary storage
+> Stores data only while the computer is ON
+> It is very fast, used by CPU to run apps
+> Data is lost when the system shuts down
+> Small size range: 8 GB, 16 GB, 32 GB
+> It is used for: Running programs and Caching recently accessed MongoDB data for fast reads.
+
+2 Disk:
+> It is Permanent storage
+> Data remains even after shutdown
+> Slower than RAM
+> Large capacity: 256 GB, 512 GB, 1 TB, 2 TB
+> It has two types:
+1. HDD > Hard Disk Drive - older, slower, uses magnetic plates
+2. SSD > Solid State Drive - modern, fast, uses electronic memory blocks
+Examples stored on disk: Photos, Videos, Apps, System files, MongoDB databases
+
+
+3. How MongoDB Stores Data:
+MongoDB stores data on disk in small, fixed-size units called pages/extents/blocks.
+> Disk is divided into pages (small chunks of storage)
+> Databases group pages into extents
+> MongoDB writes and reads data inside these extents
+> Documents are stored inside these pages
+
+
+4. WiredTiger: MongoDB’s Default Storage Engine:
+WiredTiger controls how MongoDB stores and manages data on disk.
+
+Key Features of WiredTiger:
+a. Data is stored in compressed form and Memory-mapped files allow fast access from RAM
+b. Documents are organized using B-Trees and Makes search, insert, update operations fast
+c. Only the document being modified gets locked and Allows high performance and concurrency
+d. Provides consistent views of data for safe reads
+e. Protects data against crashes and Ensures recovery after system failure
+
+
+Document Embedding & Document References:
+
+1. Document Embedding:
+means storing related data directly inside a document using nested objects or arrays.
+All related information stays together in one place.
+It's fast bcz mongoDB can return everything in just one query, without joining or looking up other collections.
+
+When to Use Embedding:
+a. If parent and child data are usually read in the same query.
+Example:
+> Blog post + its comments
+> Order + list of items purchased
+
+b. One-to-Few relationship: If there are only a small number of related items.
+Example:
+> User + a few addresses
+> Product + a few reviews
+
+c. MongoDB has a 16MB document size limit.
+Embedding is good as long as adding child data won’t make the document grow too large.
+
+
+2. Document References:
+
+means storing only the ID of another document instead of embedding the full child data.
+The documents stay separate, but they remain connected through the reference.
+
+it's useful bcz 
+> It keeps documents smaller
+> Ideal when related data is large
+> Allows updating child data independently
+> Supports reuse of the same referenced data in many places.
+
+
+When to Use References:
+a. Many-to-Many Relationships.
+Both sides can grow large, so embedding is not possible.
+
+b. Large or Frequently Changing Data.
+Referenced data lives in its own document, so updates touch only that document.
+This makes operations faster and avoids rewriting the parent document.
+
+c. Data Accessed Independently.
+If the child is not always read along with the parent, it deserves its own collection.
+ex:A list of products accessed by many parts of the app, not just the user page.
+

@@ -1,0 +1,25 @@
+1. Single Index:
+Its an index created on one field only like name or age or etc. 
+MongoDB sorts that field in the index so it can find values faster.
+
+If collection is:
+db.users.insertMany([
+  { name: "Hiba", age: 22 },
+  { name: "Aisha", age: 25 },
+  { name: "Sara", age: 20 }
+])
+Creating a single-field index on age:
+db.users.createIndex({ age: 1 })
+
+
+2. Compound Index:
+A compound index is an index on more than one field at the same time, like name + age or category + price. 
+It’s built in a specific order, and that order matters.
+
+db.products.insertMany([
+  { category: "Cosmetics", price: 200, name: "Lipstick" },
+  { category: "Cosmetics", price: 150, name: "Eyeliner" },
+  { category: "Perfume", price: 1500, name: "Aqua Mist" }
+])
+
+db.products.createIndex({ category: 1, price: 1 })
