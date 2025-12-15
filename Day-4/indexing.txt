@@ -1,9 +1,31 @@
+Data Structure:
+
+A data structure is basically a rule for arranging data.
+It tells us how to organize data in a proper and structured way so that operations like searching, inserting, deleting, or updating become more efficient.
+In MongoDB, the index uses a B-Tree data structure.
+
+1. Tree (General Tree):
+A tree is a way of arranging data in a hierarchical form — like a family tree.
+It has a root (top node) and it has children and those children can have more children.
+
+2. Binary Tree:
+A Binary Tree is a tree where each node can have at most two children:
+Left child
+Right child
+There is no rule about sorting here.
+
+3. Binary Search Tree (BST) — How it works
+A Binary Search Tree is a special type of binary tree with a sorting rule:
+Left side contains smaller values
+Right side contains larger values
+
+
+
 Indexing:
 
-An index in MongoDB is a special data structure that keeps a small, sorted version of specific fields so MongoDB can find documents quickly without scanning the whole collection. It makes read operations much faster
+An index is a separate data structure that keeps a small, sorted version of specific fields so MongoDB can find documents quickly without scanning the whole collection.
 Without an index, MongoDB performs a collection scan (COLLSCAN)
-> checks every document
-> slow for large collections
+> checks every document that results in slow for large collections
 
 With an index, MongoDB performs an index scan (IXSCAN)
 > jumps directly to the matching values
@@ -11,10 +33,9 @@ With an index, MongoDB performs an index scan (IXSCAN)
 > fast even for millions of records
 This reduces the number of documents examined.
 
-
 > Default _id Index:
-whenever we create collections, a default index gets created on _id field and it never allows to drop it.
-The _id index is the built-in primary index of every collection. It ensure fast lookups and unique documents. 
+Whenever we create collections, a default index gets created on _id field and it never allows to drop it.
+The _id index is the built-in primary index of every collection. It ensure unique documents and also fast lookups. 
 
 
 > Creating an Index:

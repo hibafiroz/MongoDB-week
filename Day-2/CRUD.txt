@@ -1,5 +1,4 @@
 CRUD stands for Create, Read, Update, and Delete. These are the four basic operations performed on a database
-
 C – Create → insertOne(), insertMany()
 R – Read → find(), findOne()
 U – Update → updateOne(), updateMany(), $set, $inc, $unset
@@ -7,38 +6,38 @@ D – Delete → deleteOne(), deleteMany()
 
 1. Create:
 
-the CREATE operation is done using insertOne() and insertMany() to add new documents into a collection.
-a. InsertOne(): db.collectionName.insertOne({…}) : Insert a single document into a collection.
-b. InsertMany(): db.collectionName.insertMany([{...},{...}]) : Insert multiple documents at the same time.
+the CREATE operation is done using 
+a. InsertOne(): adds a single document into a collection.
+b. InsertMany(): adds multiple documents at the same time.
 
 
 2.Read:
 
-READ operations are done using find() to get multiple documents and findOne() to fetch a single document based on a filter.
-a. findOne(): db.collection.findOne({ name: "Aisha" }): Get only one document and if no document matches it returns null.
-b. find(): db.students.find({ grade: "A" }): Get all matching documents.
-with condition -> db.students.find({ age: { $gt: 20 } })   // age > 20
+READ operations are done using 
+find() to get multiple documents and 
+findOne() to fetch a single document based on a filter.
 
 
 3.Update:
 
-MongoDB uses updateOne() and updateMany() for update operations, while $set, $inc, and $unset are used to modify, increment, or remove fields in a document.
-        db.collection.updateOne(filter, update)
-a. updateOne(): Updates the first document that matches the filter.
+Update operations are done using updateOne() that updates single doc and the first document that matches the filter 
+UpdateMany() Updates all documents that match the filter.
+while $set, $inc, and $unset are used to modify fields in a document.
+db.collection.updateOne(filter, update)
+
 db.students.updateOne(
   { name: "Aisha" },          // filter
   { $set: { grade: "A+" } }   // update
 )
 Only the first match is updated
 
-b.updateMany(): Updates all documents that match the filter.
 db.students.updateMany(
   { grade: "C" },
   { $set: { grade: "B" } }
 )  All students with grade C will be updated to B
 
 
-| **Operator**   | **Description**                              |
+|   Operator     |   Description                                |
 | -------------- | -------------------------------------------- |
 | `$set`         | Change or add a field                        |
 | `$unset`       | Remove a field                               |
@@ -114,8 +113,6 @@ Adds or updates updatedAt with the current date/time (ISODate)
 
 
 
-4. Delete(): MongoDB uses deleteOne() to delete a single document and deleteMany() to delete multiple documents based on a filter.
-a. deleteOne(): Delete only the first document that matches the filter.
+4. Delete(): this operation is done using deleteOne() to delete a single document and deleteMany() to delete multiple documents.
 db.students.deleteOne({ name: "Rahul" }): MongoDB will search for a document where name is "Rahul", it will delete only one, even if multiple Rahuls exist
-b. deleteMany(): Delete all documents that match the filter.
 db.students.deleteMany({}) : delete all documents from the students collection
