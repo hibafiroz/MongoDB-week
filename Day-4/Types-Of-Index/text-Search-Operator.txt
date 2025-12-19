@@ -1,0 +1,90 @@
+MongoDB Text Search Operators:
+
+MongoDB provides text search operators to perform and control text-based searching on string fields that have a text index.
+These operators are used inside the $text operator.
+
+
+1. $text:
+It enables text search in a query.
+$text tells MongoDB to perform a text-based search
+It works only on collections that have a text index
+Without a text index, $text queries will fail
+
+Syntax:
+{ $text: { ... } }
+$text is mandatory for all text search operations.
+
+
+2. $search:
+It specifies the search string (words or phrases).
+It contains the actual text to search
+MongoDB searches for these words in all fields included in the text index
+By default, multiple words are treated as OR
+
+Types of search supported:
+> Single word search    : Single word search returns all documents containing that word.
+> Multiple word search  : Multiple word search returns documents that contain any of the searched words (uses OR logic).
+> Exact phrase search   : Phrase search returns documents only if the exact sequence of words appears together (Uses AND logic).
+> Excluding words       : Documents containing excluded words prefixed with - are removed from the result.
+
+Examples:
+$search: "developer"
+$search: "backend developer"
+$search: \"full stack developer\" : This matches "Looking for a full stack developer" NOT "Developer with full stack skills"
+$search: "developer -junior"
+
+Multiple Phrase Search (OR behavior):
+$search: "\"final exam\" \"library rules\""
+MongoDB search for documents that match EITHER of these phrases:
+the exact phrase “final exam”
+OR the exact phrase “library rules”
+
+
+
+3. $language:
+It controls the stemming rules used during text search.
+language is for specifying the language,
+stemming happens because of the language.
+
+Examples of stemming:
+running → run
+developers → develop
+
+Syntax : $language:"spanish"
+Default language is english if not specified.
+
+When we write : $language: "english"
+MongoDB : uses English stemming rules and uses English stop words
+
+
+4. $caseSensitive:
+It controls whether text search is case-sensitive.
+Default value: false
+When false, uppercase and lowercase letters are treated the same
+When true, exact case matching is required
+
+Example:
+$caseSensitive: true
+Effect : Developer ≠ developer
+
+
+5. $diacriticSensitive:
+It controls accent (diacritic) sensitivity.
+Diacritics are special marks on characters
+Default value: false
+When false, accents are ignored
+When true, accents must match exactly
+
+Example:
+café ≠ cafe   (when true)
+Syntax : $diacriticSensitive:true
+
+Combined Example:
+db.collection.find({
+  $text: {
+    $search: "developer",
+    $language: "english",
+    $caseSensitive: false,
+    $diacriticSensitive: false
+  }
+})

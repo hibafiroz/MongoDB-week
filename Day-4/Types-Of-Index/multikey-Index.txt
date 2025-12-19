@@ -1,0 +1,40 @@
+3. multikey Index:
+
+A multikey index is used when we index a field that contains an array.
+MongoDB automatically converts a normal index into a multikey index when it detects array values.
+Instead of creating one index entry per document, MongoDB creates one index entry for each element in the array.
+This makes quesry faster bcz Without a multikey index, querying array fields would require a full collection scan.
+
+
+> example:
+{
+  name: "Hiba",
+  skills: ["JavaScript", "Node.js", "MongoDB"]
+}
+
+db.users.createIndex({ skills: 1 })   //auto multikey
+Here, MongoDB creates multiple index entries:
+JavaScript
+Node.js
+MongoDB
+All pointing to the same document.
+
+We can query array fields as -> db.users.find({ skills: "MongoDB" })
+
+
+> Multikey with nested objects:
+{
+  name: "Hiba",
+  projects: [
+    { tech: "React", year: 2024 },
+    { tech: "Node", year: 2025 }
+  ]
+}
+index: db.users.createIndex({ "projects.tech": 1 })  //this is also a multikey
+
+> Only ONE array field allowed in a compound index
+db.users.createIndex({ skills: 1, hobbies: 1 })  //not allowed if both are arrays
+
+> Multikey indexes use more space
+Because, One document -> many index entries
+So, Faster reads -> Slightly slower writes

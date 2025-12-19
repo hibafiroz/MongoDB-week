@@ -1,0 +1,68 @@
+2. Compound Index:
+
+A compound index is an index on multiple fields where order matters. (Upto 31 fields)
+MongoDB uses the left-prefix rule, means the index works only if the query starts with the first indexed field.
+It optimizes filtering, sorting, and can act as a covering index.
+
+Example:
+db.users.createIndex({ city: 1, age: -1 })
+First sorted by city (ASC)
+Then inside each city, sorted by age (DESC)
+
+> Why “order” matters? bcz The order of fields changes how MongoDB uses the index.
+
+> If any field used in the index is an array, the whole index becomes a multikey index.
+ex: { tags: ["mern", "node"], city: "Kochi" }
+index: createIndex({ tags: 1, city: 1 })
+
+Each element of the array creates a separate index key like => (node, Kochi), (mern, Kochi)
+MongoDB automatically creates a multikey compound index.
+
+> queries can use this multikey compound index is -
+find({ tags: "node", city: "Kochi" })
+Also, find({ tags: "node" })
+> But does NOT work well when both fields are arrays
+
+ex: tags: ["node", "mern"]
+    skills: ["frontend", "backend"]
+Index: createIndex({ tags: 1, skills: 1 })
+
+MongoDB does NOT allow two array fields in the same compound index
+This is to avoid explosions like:
+node + frontend
+node + backend
+mern + frontend
+mern + backend
+Too many combinations → index becomes huge → forbidden.
+
+> If the query needs ONLY fields inside the index, MongoDB doesn’t touch the actual document.
+ex: { city: 1, age: 1 }
+query: find({ city: "Kochi" }, { city: 1, age: 1, _id: 0 })
+MongoDB fetches the result directly from the Index
+
+
+> Left Prefix Rule:
+> MongoDB can use a compound index only if the query starts from the first field(s) of the index.
+> > Supported Patterns: Equality -> Sort -> Range
+{ city: 1, age: 1, score: 1 }
+
+| Query                                   | Can Use Index?                       |
+| --------------------------------------- | ------------------------------------ |
+| `{ city: "Kochi" }`                     |     Yes                              |
+| `{ city: "Kochi", age: 22 }`            |     Yes                              |
+| `{ city: "Kochi", age: 22, score: 89 }` |     Yes                              |
+| `{ age: 22 }`                           |     No (city missing!)               |
+| `{ score: 89 }`                         |     No                               |
+| `{ age: 22, score: 89 }`                |     No                               |
+| `({ city: "Kochi"}).sort(score:1)       |     No (age missed)                  |
+| `( city:Kochi,age:$gt:20).sort(score:1)`|   No (after range, the next breaks)  |
+| `( city:Kochi,score:$gt:20).sort(age:1)`|   Yes (age is sort, score is range)  |
+| `{ age: 22, score: 89 }`                |     No                               |
+
+
+> Compound Index helps with both filter + sort
+Ex: db.users.createIndex({ city: 1, age: 1 })
+query: db.users.find({ city: "Kochi" }).sort({ age: 1 })
+
+> MongoDB simply reads the index from top to bottom. No need to go through whole document.
+No sorting needed → very fast.

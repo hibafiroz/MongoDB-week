@@ -1,0 +1,173 @@
+4. Text Index:
+
+A text index is a special index that allows fast searching of text content inside string fields. 
+It enables features like:
+Word-based search
+Phrase search
+Language-based stemming
+It is mandatory for $text queries and only one text index is allowed per collection.
+> Why do we need a Text Index?
+
+Normal indexes: Work well for exact matches (=, <, >)
+example:
+{ title: "Full Stack Developer" }
+{ title: "Backend Developer" }
+normal index: db.jobs.createIndex({ title: 1 })
+This index works like a dictionary
+we have to find like this : find({ title: "Backend Developer" })
+suppose we search "developer"
+But stored value is : "Full Stack Developer"
+Normal index fails because It tries to match the whole string, it does NOT understand words inside the string
+so, Text search needs:
+   Searching words, not exact strings
+   Ignoring case by default
+   Handling language rules (run, running → run)
+
+Creating a Text Index:
+
+1. Single field text index:
+db.jobs.createIndex({ title: "text" })
+
+2. Multiple fields text index:
+db.jobs.createIndex({
+  title: "text",
+  description: "text",
+  skills: "text"
+})
+
+Note: Only ONE text index is allowed per collection.
+
+> Default Language in Text Index is english
+db.jobs.createIndex(
+  { description: "text" },
+  { default_language: "english" }
+)
+
+> Supports multiple fields:
+
+if our document is
+{
+  title: "Backend Developer",
+  description: "Node.js and MongoDB experience",
+  skills: "JavaScript MongoDB Express"
+}
+
+we create ONE text index in one collection like this:
+db.jobs.createIndex({
+  title: "text",
+  description: "text",
+  skills: "text"
+})
+Now MongoDB treats all these fields as one search space.
+
+When user searches : $search: "MongoDB"
+MongoDB will check: description and skills
+Even though the word is not in title, the document is returned.
+
+Without this text index:
+find({
+  $or: [
+    { title: /MongoDB/i },
+    { description: /MongoDB/i },
+    { skills: /MongoDB/i }
+  ]
+})
+Slow, messy, bad for large data.
+
+
+HOW MONGODB TEXT SEARCH WORKS INTERNALLY:
+
+Phase 1: Index Creation Time (One-time process)
+
+1. Read indexed fields:
+
+MongoDB reads only the fields included in the text index
+example FIELDS: title, description, skills 
+
+2. Tokenization:
+
+MongoDB breaks the text into individual words (tokens)
+Example text
+"Looking for a backend developer with MongoDB experience"
+After tokenization => looking, for, a, backend, developer, with, mongodb, experience
+
+3. Remove stop words:
+
+MongoDB removes common words that don’t add meaning.
+Removed words => for, a, with
+Remaining words => looking, backend, developer, mongodb, experience
+Bcz these words appear everywhere, Indexing them wastes space and time
+
+4. Normalization:
+
+MongoDB converts words to a standard form.
+MongoDB → mongodb
+Developer → developer
+So searches become case-insensitive.
+
+5. Stemming:
+
+MongoDB reduces words to their root form.
+Examples
+developing → develop
+developer → develop
+developed → develop
+This helps MongoDB understand word variations.
+
+6. Build Inverted Index:
+
+stemmed words are stored in separate text index, not inside document
+MongoDB builds an inverted index that maps words to document IDs.
+Example inverted index
+backend   → doc1
+developer → doc1, doc2
+mongodb   → doc1, doc2, doc3
+react     → doc2
+This allows MongoDB to:
+> Find documents by words quickly
+
+
+Phase 2: Search Time (Every query)
+
+> What happens on search:
+Step 1: User enters search text  ->  "Backend Developer"
+Step 2: Applies the same steps used during indexing:
+Step 3: MongoDB looks up words in the inverted index
+Step 4: MongoDB finds matching document IDs
+Step 5: Matching documents are returned
+
+
+> When words are long, Index size increases, Not the document size
+but it does NOT become a big problem bcz-
+Reason 1: Inverted index is compact.  word → [DocIDs]
+If "mongodb" appears 100 times, stored once. So repetition does not explode memory.
+Reason 2: Index is optimized & compressed
+
+When we create a text index, it internally performs several steps to enable efficient text search.
+First, MongoDB tokenizes the text by breaking sentences into individual words.
+Then it removes stop words like ‘is’, ‘the’, ‘and’, which don’t add much meaning.
+After that, it normalizes the text by converting everything to lowercase so the search becomes case-insensitive.
+Next, it applies stemming, where different word forms are reduced to a common root.
+Finally, MongoDB builds an inverted index, where each word points to the documents containing it.
+This structure allows MongoDB to quickly find relevant documents without scanning the entire collection, which is why text search is fast and scalable.”
+
+
+TEXT SEARCH OPERATORS:
+
+1. $text: 
+    It is used to enable text search in a query
+    It works only on fields with a text index
+    Without a text index, query fails
+
+Example:
+db.jobs.find({ $text: { $search: "developer" } })
+
+2. $search:
+    It contains the search string (words or phrases)
+    It Supports: Single word, Multiple words (OR by default), Exact phrase, Excluding words
+
+Examples:
+$search: "developer backend"          // OR search
+$search: "\"full stack developer\""   // exact phrase
+$search: "developer -junior"          // exclude word
+

@@ -1,0 +1,22 @@
+1. Single Index:
+
+A single-field index is an index created on one field of a document.
+It improves the speed of queries that search, sort, or filter based on that specific field
+
+
+> If collection is:
+
+db.users.insertMany([
+  { name: "Hiba", age: 22 },
+  { name: "Aisha", age: 25 },
+  { name: "Sara", age: 20 }
+])
+
+
+> Creating a single-field index on age:
+db.users.createIndex({ age: 1 })
+
+> When should use single-field index?
+Searching by a single field (find({ city: "Kochi" }))
+Sorting by a field (sort({ age: 1 }))
+Range queries (age > 20)
