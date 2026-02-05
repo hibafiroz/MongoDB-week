@@ -1,0 +1,25 @@
+> MongoDB Aggregation:
+
+It is used to work with many documents and finally get one meaningful result. 
+It works like a pipeline where documents goes step by step through different stages. Each step is called a stage.
+
+
+> Core / Common Aggregation Stages in MongoDB:  starts with :{...}
+
+1. $match
+2. $project
+3. $addFields
+4. $group
+5. $sort
+6. $limit
+7. $skip
+
+> Other useful stages:
+
+1. $lookup
+2. $unwind
+3. $count
+
+Aggregation is mainly used for reports and analytics.
+Example: Count users by city, Find total sales, Find average marks
+Compared to find(), aggregation is more powerful because it can change and calculate data, not just fetch it.

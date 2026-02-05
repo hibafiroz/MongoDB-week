@@ -1,0 +1,26 @@
+7. $skip:
+
+$skip is used to ignore a given number of documents from the beginning of the result.
+
+Example:
+Skip first student
+db.students.aggregate([
+ { $sort:{ marks:-1 } },
+ { $skip:1 }
+])
+
+
+> $skip + $limit:
+
+ Page 2 (2 records per page)
+db.students.aggregate([
+ { $sort:{ marks:-1 } },
+ { $skip:2 },
+ { $limit:2 }
+])
+
+
+Meaning:
+Sort students
+Skip first 2
+Show next 2

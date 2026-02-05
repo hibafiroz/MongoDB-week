@@ -1,6 +1,6 @@
 2. Compound Index:
 
-A compound index is an index on multiple fields where order matters. (Upto 31 fields)
+A compound index is an index created on multiple fields of a document where order matters. (Upto 31 fields)
 MongoDB uses the left-prefix rule, means the index works only if the query starts with the first indexed field.
 It optimizes filtering, sorting, and can act as a covering index.
 
@@ -9,7 +9,7 @@ db.users.createIndex({ city: 1, age: -1 })
 First sorted by city (ASC)
 Then inside each city, sorted by age (DESC)
 
-> Why “order” matters? bcz The order of fields changes how MongoDB uses the index.
+> Why order matters? bcz The order of fields changes how MongoDB uses the index.
 
 > If any field used in the index is an array, the whole index becomes a multikey index.
 ex: { tags: ["mern", "node"], city: "Kochi" }

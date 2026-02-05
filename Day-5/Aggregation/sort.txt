@@ -1,0 +1,57 @@
+5. $sort:
+
+It is used to arrange documents in ascending or descending order based on a field.
+1 → ascending (small → big, A → Z)
+-1 → descending (big → small, Z → A)
+
+Example:
+[
+ { name:"Hiba", marks:80 },
+ { name:"Sara", marks:60 },
+ { name:"Ayesha", marks:90 }
+]
+
+> Sort by marks (highest first)
+db.students.aggregate([
+ { $sort:{ marks:-1 } }
+])
+
+output:
+Ayesha (90)
+Hiba (80)
+Sara (60)
+
+
+// When we use $group with:
+
+$first and $last or when we want top / latest / highest values
+then order matters. So we MUST sort first.
+
+Example (Top student in each class)
+db.students.aggregate([
+ { $sort:{ marks:-1 } },   // sort first
+ {
+  $group:{
+   _id:"$class",
+   topper:{ $first:"$name" }
+  }
+ }
+])
+
+Meaning:
+Sort students by marks (highest first)
+Group by class
+$first picks highest mark student
+
+=> We sort before grouping when we use $first or $last because grouping depends on order; otherwise we group first and sort later.
+
+> When we dont need sort first:
+
+If we are only doing: count, sum, average
+order doesn’t matter.
+
+Example (count students per class)
+db.students.aggregate([
+ { $group:{ _id:"$class", count:{ $sum:1 } } },
+ { $sort:{ count:-1 } }
+])

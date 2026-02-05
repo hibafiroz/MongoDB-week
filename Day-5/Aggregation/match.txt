@@ -1,0 +1,14 @@
+1. $match:
+
+It is used to filter documents based on a condition.
+It works exactly like the find() method but inside aggregation.
+Only documents that satisfy the condition will move to the next stage.
+For example: 
+[
+ { name:"Hiba", age:22 },
+ { name:"Sara", age:25 }
+]
+
+db.users.aggregate([
+ { $match:{ age:22 } }
+])                          // only name Hiba document is returned.

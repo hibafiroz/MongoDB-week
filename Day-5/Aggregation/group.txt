@@ -1,0 +1,205 @@
+4. $group:
+
+It is used to combine multiple documents into fewer documents based on a common field.
+In aggregation, the $group stage uses _id to decide how documents are grouped.
+It is mainly used for:
+counting
+summing
+averaging
+finding min / max
+collecting values
+So $group is used when we want summary data.
+
+> Syntax:
+{
+ $group:{
+  _id:<grouping key>,
+  field:{ accumulator:expression }
+ }
+}
+_id → field used for grouping
+accumulator → calculation operator
+
+For example: 
+> Count users by city
+db.users.aggregate([
+ {
+  $group:{
+   _id:"$city",
+   count:{ $sum:1 }
+  }
+ }
+])
+
+> Total salary by city
+db.users.aggregate([
+ {
+  $group:{
+   _id:"$city",
+   totalSalary:{ $sum:"$salary" }
+  }
+ }
+])
+
+> Average salary
+db.users.aggregate([
+ {
+  $group:{
+   _id:null,
+   avgSalary:{ $avg:"$salary" }
+  }
+ }
+])
+
+But sometimes, grouping by only one field is not enough.
+_id:{
+ field1:"$field1",
+ field2:"$field2"
+}
+Example:
+[
+ { name:"Hiba", city:"Kannur", gender:"F" },
+ { name:"Sara", city:"Kannur", gender:"F" },
+ { name:"Ali", city:"Kannur", gender:"M" },
+ { name:"Ayesha", city:"Kochi", gender:"F" }
+]
+Group by city AND gender:
+db.users.aggregate([
+ {
+  $group:{
+   _id:{
+    city:"$city",
+    gender:"$gender"
+   },
+   count:{ $sum:1 }
+  }
+ }
+])
+output:
+Kannur + F → 2  
+Kannur + M → 1  
+Kochi + F → 1  
+
+> If we do NOT wanna group by any field and put ALL documents into ONE single group,
+we use _id:null
+when we want one final result, not multiple groups.
+db.students.aggregate([
+ {
+  $group:{
+   _id:null,
+   avgMarks:{ $avg:"$marks" }
+  }
+ }
+])
+
+
+> Accumulator Operators:
+Used inside $group:
+
+Example: Sample Collection (students)
+[
+ { name:"Hiba", class:"A", marks:80 },
+ { name:"Sara", class:"A", marks:60 },
+ { name:"Ayesha", class:"B", marks:90 }
+]
+
+a. $sum: Adds values or counts documents. -> count:{ $sum:1 }
+> Count students in each class
+db.students.aggregate([
+ {
+  $group:{
+   _id:"$class",
+   totalStudents:{ $sum:1 }
+  }
+ }
+])
+output: A → 2
+        B → 1
+
+b. $avg: Finds average. -> avgSalary:{ $avg:"$salary" }
+> Average marks per class
+db.students.aggregate([
+ {
+  $group:{
+   _id:"$class",
+   avgMarks:{ $avg:"$marks" }
+  }
+ }
+])
+output: A → 70
+        B → 90
+
+c. $min: Finds smallest value.
+> Lowest marks in each class
+db.students.aggregate([
+ {
+  $group:{
+   _id:"$class",
+   minMarks:{ $min:"$marks" }
+  }
+ }
+])
+output: A → 60
+        B → 90
+
+d. $max: Finds largest value.
+> Highest marks in each class
+db.students.aggregate([
+ {
+  $group:{
+   _id:"$class",
+   maxMarks:{ $max:"$marks" }
+  }
+ }
+])
+
+e. $first: Gives first value in group.
+> First value in group
+db.students.aggregate([
+ {
+  $group:{
+   _id:"$class",
+   firstStudent:{ $first:"$name" }
+  }
+ }
+])
+Gives first student in each class (depends on order).
+
+f. $last: Gives last value in group.
+> Last value in group
+db.students.aggregate([
+ {
+  $group:{
+   _id:"$class",
+   lastStudent:{ $last:"$name" }
+  }
+ }
+])
+Gives last student in each class.
+
+g. $push: Collects values into array.
+> Collect student names by class
+db.students.aggregate([
+ {
+  $group:{
+   _id:"$class",
+   names:{ $push:"$name" }
+  }
+ }
+])
+output: A → ["Hiba","Sara"]
+        B → ["Ayesha"]
+
+e. $addToSet: Collects unique values only.
+> Same like $push, but removes duplicates.
+db.students.aggregate([
+ {
+  $group:{
+   _id:null,
+   classes:{ $addToSet:"$class" }
+  }
+ }
+])
+output: ["A","B"]
+
+> After $group, you get one result per group — and if _id is null, everything becomes one single group, so you get only one value.

@@ -1,0 +1,45 @@
+3. $addFields:
+It is  used to add new fields to existing documents while keeping all original fields.
+> $addFields does NOT remove old fields.
+> It only adds new fields on top of existing data.
+
+for example:
+[
+ {
+  items:2,
+  price:500,
+  discount:100
+ }
+]
+
+db.orders.aggregate([
+ {
+  $addFields:{
+   status:"paid"
+  }
+ }
+])
+ output:
+ {
+ items:2,
+ price:500,
+ discount:100,
+ status:"paid"
+}
+
+> Final amount after discount:
+db.orders.aggregate([
+ {
+  $addFields:{
+   finalAmount:{
+    $subtract:[
+     { $multiply:["$items","$price"] },
+     "$discount"
+    ]
+   }
+  }
+ }
+])
+
+
+> Both $project and $addFields can create new fields, but $project reshapes documents and may remove existing fields, while $addFields keeps all original fields and only adds new ones.

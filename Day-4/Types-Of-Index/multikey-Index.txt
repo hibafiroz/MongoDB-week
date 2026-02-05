@@ -2,8 +2,9 @@
 
 A multikey index is used when we index a field that contains an array.
 MongoDB automatically converts a normal index into a multikey index when it detects array values.
-Instead of creating one index entry per document, MongoDB creates one index entry for each element in the array.
-This makes quesry faster bcz Without a multikey index, querying array fields would require a full collection scan.
+MongoDB does not create one index for the full document. Instead, it creates separate index entries for each value inside the array.
+Because of this, MongoDB can find array values quickly.
+Without a multikey index, MongoDB must check every document, which is slow.
 
 
 > example:
@@ -20,7 +21,6 @@ MongoDB
 All pointing to the same document.
 
 We can query array fields as -> db.users.find({ skills: "MongoDB" })
-
 
 > Multikey with nested objects:
 {
