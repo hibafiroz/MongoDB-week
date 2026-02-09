@@ -1,0 +1,58 @@
+Capped Collections:
+
+- A capped collection is a fixed-size collection.
+  It is basically used when we want to keep only the latest data. 
+
+- We define a fixed size for the collection in bytes, and Once it reaches its size limit, MongoDB doesn't stop inserting data 
+  instead it automatically removes the oldest documents to insert new ones.
+
+- All this is handled internally by MongoDB, we don't manually delete anything
+- It's mainly used for logs or streaming data where we only care about the most recent records.
+
+Example:
+
+db.createCollection("logs", {
+  capped: true,
+  size: 1024 * 1024,  // 1MB (given in bytes)
+  max: 1000    //max documents we can insert (optional)
+})
+MongoDB is allowed to use ONLY 1MB for this collection
+
+MongoDB does NOT stop inserts.
+Instead New documents keep coming, Oldest documents disappear automatically
+
+
+> Characteristics of Capped Collection:
+
+1. Fixed size:
+When you create a capped collection, you must give the size.We can’t change it later.
+
+2. Must be explicitly created:
+MongoDB will NOT auto-create capped collections, We must create explicitly.
+We also can’t convert a normal collection into capped easily. It must be created capped from the start.
+
+3. Automatic overwrite of oldest documents:
+Once size fills, MongoDB removes oldest docs automatically. We don’t delete manually.
+
+4. Insertion order preserved:
+Documents stay in the exact order they were inserted.
+
+5. Very fast inserts:
+Because:
+Writes are sequential
+No delete cleanup
+MongoDB just overwrites
+So inserts are faster than normal collections.
+
+6. Document size is fixed after insertion:
+After inserting a document, We cannot increase its size Because that would break the fixed-size structure.
+
+7. Limited updates:
+We can update fields only if size doesn’t grow.
+
+8. No document deletion:
+We cannot do deleteOne()
+Only MongoDB itself can removes old docs and also We can't drop entire collection.
+
+9. Limited index support:
+We cannot use TTL index bcz the deletion happens in ttl, Text index bcz tokenization, inverted index structures, frequent updates

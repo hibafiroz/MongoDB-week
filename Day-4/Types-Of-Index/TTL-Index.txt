@@ -1,0 +1,84 @@
+9. TTL index:
+
+TTL index in MongoDB is used to automatically delete documents after a certain time. 
+We create it on a Date field using expireAfterSeconds. 
+MongoDB runs a background process that checks expired documents and removes them. 
+It's mainly used for temporary data like sessions or OTPs.
+
+TTL index works in two ways. One way is based on expireAfterSeconds, where MongoDB deletes documents after a fixed duration from a Date field like createdAt. 
+The second way is storing an exact expiry time inside the document using a field like expireAt, and setting expireAfterSeconds to zero. 
+Then MongoDB removes the document when that exact time is reached.
+
+- Used for auto-cleanup of old data.
+
+Syntax:
+db.sessions.createIndex(
+  { createdAt: 1 },
+  { expireAfterSeconds: 3600 }
+)
+Means Delete each document 1 hour after createdAt time.
+
+> The Indexed field must be date type
+{ createdAt: new Date() }
+If it’s not Date, TTL will NOT work.
+
+> How TTL Works Internally:
+MongoDB runs a background job every ~60 seconds.
+
+- Checks documents having TTL index
+- Compares document date with current time
+- If time ≥ expireAfterSeconds
+- Deletes the document
+
+
+> There are TWO ways TTL works:
+
+1. TTL Based on Expiration Seconds:
+We give MongoDB how many seconds to keep the document.
+
+Example:
+{
+  message: "login failed",
+  createdAt: new Date()
+}
+
+Create TTL index:
+db.logs.createIndex(
+  { createdAt: 1 },
+  { expireAfterSeconds: 300 }
+)
+
+It says Keep this document for 5 minutes, then delete it.
+MongoDB deletes each document 5 minutes after createdAt.
+
+2. TTL Based on Exact Expiry Time:
+Here, we directly store when the document should expire.
+
+Example:
+db.users.insertOne({
+  name: "Asha",
+  expireAt: new Date("2025-01-01")
+})
+
+Create TTL index:
+db.users.createIndex(
+  { expireAt: 1 },
+  { expireAfterSeconds: 0 }
+)
+When system time reaches that date → DELETE. No calculation.
+MongoDB deletes document exactly when expireAt is reached.
+
+- Its like ticket expiry: Valid till Jan 1, 2025, After that → invalid.
+
+> Note:
+- TTL index cannot be a compound index. It must be on a single Date field only.
+db.users.createIndex(
+  { createdAt: 1, status: 1 },
+  { expireAfterSeconds: 3600 }
+)
+This will not work.
+
+- TTL index does NOT work on String or Number fields.
+{ createdAt: "2026-02-09" }   // string
+{ createdAt: 1707450000 }    // number
+MongoDB will ignore TTL on these.

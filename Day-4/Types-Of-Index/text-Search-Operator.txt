@@ -1,31 +1,26 @@
 MongoDB Text Search Operators:
-
-MongoDB provides text search operators to perform and control text-based searching on string fields that have a text index.
-These operators are used inside the $text operator.
+MongoDB provides some operators for text search, and we use them inside $text.
 
 
 1. $text:
-It enables text search in a query.
-$text tells MongoDB to perform a text-based search
-It works only on collections that have a text index
-Without a text index, $text queries will fail
+We use $text operator to search text But before using $text, we must create a text index on string fields. 
+If there is no text index, $text search will not work.
 
 Syntax:
 { $text: { ... } }
 $text is mandatory for all text search operations.
 
 
-2. $search:
-It specifies the search string (words or phrases).
-It contains the actual text to search
-MongoDB searches for these words in all fields included in the text index
-By default, multiple words are treated as OR
 
-Types of search supported:
-> Single word search    : Single word search returns all documents containing that word.
-> Multiple word search  : Multiple word search returns documents that contain any of the searched words (uses OR logic).
-> Exact phrase search   : Phrase search returns documents only if the exact sequence of words appears together (Uses AND logic).
-> Excluding words       : Documents containing excluded words prefixed with - are removed from the result.
+2. $search:
+It specifies the actual text to search
+
+Using $search, we can do single-word search that returns all documents containing that word, 
+multiple-word search that returns documents that contain any of the searched words (uses OR logic), 
+exact phrase search returns documents that contain exact searched words and 
+we can also exclude words using a minus sign
+
+By default, multiple words are treated as OR logic.
 
 Examples:
 $search: "developer"
@@ -42,37 +37,33 @@ OR the exact phrase “library rules”
 
 
 3. $language:
-It controls the stemming rules used during text search.
-language is for specifying the language,
-stemming happens because of the language.
+The $language option is used to specify the language for text search. It controls stemming rules, 
+which means MongoDB converts words to their root form, like 'developers' to 'develop'. 
+If we don't specify $language, MongoDB uses English by default.
 
-Examples of stemming:
-running → run
-developers → develop
-
-Syntax : $language:"spanish"
+Syntax : $language: "spanish"
 Default language is english if not specified.
 
 When we write : $language: "english"
 MongoDB : uses English stemming rules and uses English stop words
 
 
+
 4. $caseSensitive:
 It controls whether text search is case-sensitive.
-Default value: false
-When false, uppercase and lowercase letters are treated the same
-When true, exact case matching is required
+By default, it is false, so MongoDB treats uppercase and lowercase as the same.
+When true, exact case matching is required.
 
 Example:
 $caseSensitive: true
-Effect : Developer ≠ developer
+Developer ≠ developer
+
 
 
 5. $diacriticSensitive:
-It controls accent (diacritic) sensitivity.
-Diacritics are special marks on characters
-Default value: false
-When false, accents are ignored
+It decides if MongoDB should care about accent marks on letters.
+Diacritic is a small symbols on letters
+By default, it is false, so MongoDB ignores accent.
 When true, accents must match exactly
 
 Example:

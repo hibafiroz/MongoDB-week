@@ -1,8 +1,8 @@
 1. Single Index:
 
 A single-field index is an index created on one field of a document.
-It is used when we search or sort data using only one field.
-This improves query performance and reduces search time.
+It is used when we perform operations using only single field.
+So it reduces search time.
 
 
 > If collection is:

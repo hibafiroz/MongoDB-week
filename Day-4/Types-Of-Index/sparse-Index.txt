@@ -1,0 +1,25 @@
+7. Sparse Index:
+
+- A sparse index means it only creates index entries for documents that actually have that field. 
+  If some documents don’t contain that field, MongoDB just ignores them completely while indexing. 
+  Bcz of that, the index becomes smaller.
+
+- By default, even if a field is missing, MongoDB still indexes that document as null
+- if we search for email: null, those missing-email documents won't come back bcz they were never indexed in the first place.
+
+> Example:
+[
+  { name: "Hiba", age: 23 },
+  { name: "Sara" },
+  { name: "Ayaan", age: 25 }
+]
+
+db.users.createIndex({ age: 1 }, { sparse: true })
+
+Only these get indexed:
+{ name: "Hiba", age: 23 }
+{ name: "Ayaan", age: 25 }
+
+If we run:
+db.users.find({ age: null })
+Sparse index will not return documents without age bcz they are not indexed at all.

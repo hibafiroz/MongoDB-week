@@ -1,34 +1,18 @@
-Hashed Index:
+5. Hashed Index:
 
-🔹 Hashed Index (MongoDB)
-A hashed index stores the hash value of a field, not the actual value
-Field values are converted into random-looking numbers
+- A hashed index changes the field value into a hash number and stores that instead of the actual value. 
+- When we search, MongoDB also hashes the search value and compares it. If it matches, MongoDB returns the corresponding document.
+
+- Hashed index is mainly used for equal searches and to spread data evenly. 
+  It cannot be used for sorting or range search bcz hash values do not keep the original order.
+
 Example:
 "userId": "A001"
-hash("A001") → 2398472398
-The hash value is a fixed-size number generated from the field value.
 
-> Why hashing? Hashing is used to:
-Distribute values uniformly
-Speed up equality-based searches
-Support sharding
-Hashed indexes are not meant for sorting or range queries.
+syntax: db.collection.createIndex({ fieldName: "hashed" })
 
-syntax:
-db.collection.createIndex({ fieldName: "hashed" })
-
-Example:
-{ userId: "A001" }
 db.users.createIndex({ userId: "hashed" })
 "A001" → 2398472398472398.  This hash value is what gets stored in the index.
-
-> How Search Works:
-1. User queries :  db.users.find({ userId: "A001" })
-2. MongoDB:
-Hashes "A001"
-Looks for the hash in the index
-3. If hash matches:
-Corresponding document is returned.
 
 What Hashed Index is GOOD for?
 Equality searches (field = value)
@@ -48,30 +32,3 @@ ex: { userId: { $gt: "A001" } }
 | Range queries    | ✅            | ❌            |
 | Sorting          | ✅            | ❌            |
 | Sharding support | ❌            | ✅            |
-
-
-Properties of a Hash:
-
-1. Same input → always same output
-Hash functions are deterministic
-The same value will always produce the same hash
-Example:
-"A001" → 239847239
-"A001" → 2398472398
-
-2. Looks random
-Hash values appear random
-Similar inputs do not generate similar outputs
-Example:
-"A001" → 239847239
-"A002" → 9823749823
-3. No ordering
-Hash values do not preserve order
-Cannot determine which hash is bigger or smaller
-❌ Not suitable for:
-Sorting
-Range queries (<, >, between)
-
-4. Helps distribute values equally
-Hashing spreads values uniformly
-Prevents data from clustering in one place

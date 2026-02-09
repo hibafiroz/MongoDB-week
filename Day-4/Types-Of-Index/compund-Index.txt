@@ -1,8 +1,15 @@
 2. Compound Index:
 
-A compound index is an index created on multiple fields of a document where order matters. (Upto 31 fields)
-MongoDB uses the left-prefix rule, means the index works only if the query starts with the first indexed field.
-It optimizes filtering, sorting, and can act as a covering index.
+- A compound index is an index created on multiple fields of a document, and the order of fields matters. 
+MongoDB follows the left-prefix rule, which means the query must start with the first indexed field to use the index.
+For example, if we create an index on city and age, MongoDB first sorts by city and then by age inside each city.
+
+- If any field in a compound index is an array, MongoDB automatically converts it into a multikey index. 
+but MongoDB doesn’t allow more than one array fields, because it would create too many index combinations and can use more storage.
+
+- Also, if all queried fields are present in the index, MongoDB can return results directly from the index without touching the actual documents. 
+This is called a covering index.
+
 
 Example:
 db.users.createIndex({ city: 1, age: -1 })
@@ -18,7 +25,7 @@ index: createIndex({ tags: 1, city: 1 })
 Each element of the array creates a separate index key like => (node, Kochi), (mern, Kochi)
 MongoDB automatically creates a multikey compound index.
 
-> queries can use this multikey compound index is -
+> queries can use this multikey compound index as -
 find({ tags: "node", city: "Kochi" })
 Also, find({ tags: "node" })
 > But does NOT work well when both fields are arrays
@@ -35,7 +42,7 @@ mern + frontend
 mern + backend
 Too many combinations → index becomes huge → forbidden.
 
-> If the query needs ONLY fields inside the index, MongoDB doesn’t touch the actual document.
+> If the query needs ONLY fields inside the index, MongoDB doesn't touch the actual document.
 ex: { city: 1, age: 1 }
 query: find({ city: "Kochi" }, { city: 1, age: 1, _id: 0 })
 MongoDB fetches the result directly from the Index
@@ -63,6 +70,3 @@ MongoDB fetches the result directly from the Index
 > Compound Index helps with both filter + sort
 Ex: db.users.createIndex({ city: 1, age: 1 })
 query: db.users.find({ city: "Kochi" }).sort({ age: 1 })
-
-> MongoDB simply reads the index from top to bottom. No need to go through whole document.
-No sorting needed → very fast.

@@ -1,23 +1,36 @@
 4. Text Index:
 
-A text index is a special index that allows fast searching of text content inside string fields. 
+- Text index is used when we want to search words inside string fields. 
+- Normal indexes only matches full strings, but text index can search individual words like 'developer' even if the full value is 'Full Stack Developer'.
+
+- Internally how it works is, first everything is converted to lowercase called normalization then 
+  It breaks the text into individual words which is called tokenization. 
+  Then, stop words are removed, and stemming reduces the words into their root form.
+  After that, an inverted index is created where each word points to the documents that containing it.
+
+- Only one text index is allowed per collection, and it’s mainly for text searching — not for sorting or range queries.
+
+
 It enables features like:
 Word-based search
 Phrase search
 Language-based stemming
 It is mandatory for $text queries and only one text index is allowed per collection.
-> Why do we need a Text Index?
 
+
+> Why do we need a Text Index?
 Normal indexes: Work well for exact matches (=, <, >)
-example:
+
+> Example:
 { title: "Full Stack Developer" }
 { title: "Backend Developer" }
-normal index: db.jobs.createIndex({ title: 1 })
-This index works like a dictionary
+
+normal index: db.jobs.createIndex({ title: 1 }) -> This index works like a dictionary
 we have to find like this : find({ title: "Backend Developer" })
-suppose we search "developer"
-But stored value is : "Full Stack Developer"
+
+suppose we search "developer" But stored value is : "Full Stack Developer"
 Normal index fails because It tries to match the whole string, it does NOT understand words inside the string
+
 so, Text search needs:
    Searching words, not exact strings
    Ignoring case by default
@@ -170,4 +183,3 @@ Examples:
 $search: "developer backend"          // OR search
 $search: "\"full stack developer\""   // exact phrase
 $search: "developer -junior"          // exclude word
-

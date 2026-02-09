@@ -63,7 +63,8 @@ c. Sorting or filtering happens often on a field
 
 > When NOT to Use Indexes:
 a. Field is rarely searched
-b. Query returns most of the collection (80–90%)
+b. Frequent inserts/updates
+c. Query returns most of the collection (80–90%)
 Examples:
 Boolean field (true/false)
 Gender field (male/female)
@@ -78,7 +79,7 @@ It telles: Whether index was used, Whether it did COLLSCAN or IXSCAN, Query plan
 
 
 > explain("executionStats"):
-Runs the query and shows real performance statistics:
+Used to analyze query performance.
 Exampel:
 db.users.find({ age: 25 }).explain("executionStats")
 
@@ -88,6 +89,27 @@ b. executionTimeMillis: time taken to run the query
 c. totalDocsExamined: number of documents scanned
 d. stage: "COLLSCAN" → collection scan
 d. stage: "IXSCAN" → index scan
+e. winningPlan
+
+Covered Queries:
+A query is covered when:
+All fields in query are in index
+All fields in projection are in index
+MongoDB does NOT read actual documents
+
+Winning Plan:
+MongoDB may try multiple plans.
+The fastest plan becomes the winning plan.
+Shown inside explain().
+
+limit():
+Returns only required documents
+db.users.find().limit(5)
+
+Projection:
+Fetch only needed fields
+Saves memory + bandwidth
+db.users.find({}, { name:1, _id:0 })
 
 
 Note: 
@@ -96,3 +118,4 @@ To clear terminal : cls (clear shell)
 To delete collection : db.collection.drop()
 To remove Index : db.collection.dropIndex({age(field) : 1(ascending)})
 To check how many index present : db.collection.getIndexes()
+

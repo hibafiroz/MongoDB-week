@@ -1,0 +1,43 @@
+8. Partial Index:
+
+- It is used to index only documents that match a specific condition. We define that condition using partialFilterExpression. So instead of indexing all documents or just skipping missing fields like sparse index, here we fully control which documents get indexed
+- This reduces index size
+
+> Example:
+
+[
+ { name:"Hiba", email:"a@gmail.com", verified:true },
+ { name:"Sara", email:"b@gmail.com", verified:false },
+ { name:"Ayaan" }
+]
+
+db.users.createIndex(
+  { email: 1 },
+  { partialFilterExpression: { verified: true } }
+)
+This means Only Hiba with verified:true get indexed.
+
+> Another example:
+
+db.users.insertMany([
+  { name: "Hiba", status: "active", age: 23 },
+  { name: "Asha", status: "inactive", age: 25 },
+  { name: "Sara", status: "active", age: 22 },
+  { name: "John", age: 30 }
+])
+
+> Create Partial Index:
+
+db.users.createIndex(
+  { status: 1 },
+  { partialFilterExpression: { status: "active" } }
+)
+
+Indexed: Hiba, Sara
+
+Query That Uses Index:
+db.users.find({ status: "active" })
+
+Query That Does NOT Use Index:
+db.users.find({ name: "Asha" })
+
